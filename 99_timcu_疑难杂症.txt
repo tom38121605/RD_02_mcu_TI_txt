@@ -1,0 +1,36 @@
+
+1. 串口打印时，前面会多打印一个字符FE   （波特率1M）    //STM32C011F6U6TR
+
+分析1： 应该是串口缓冲区里面预存了一个字符在里面
+分析2： 如果把波特率修改成115200，则无此问题
+分析3： 在GS385_TXRX中，同样是波特率1M，却无此问题  （而且两个gpio设置完全相同，very high，no pull, fast enable）
+解决：  在初始化的时候，增加下面这一句
+
+   main
+
+      /* USER CODE BEGIN SysInit */
+
+
+      LL_RCC_ConfigMCO(LL_RCC_MCO1SOURCE_SYSCLK, LL_RCC_MCO1_DIV_4); //12Mhz = 48Mhz/4          //--add
+      /* USER CODE END SysInit */
+
+
+2. PC15做tim3的ch3的pwm输出时，mx单独生成工程是有波形ok。但直接在adcsensor工程中添加pc15的pwm功能则无波形err    //STM32C011F6U6TR
+
+解决1： 在keil的魔法棒  --  debug选项卡  -- 右边setting  -- flash download  -- 勾选 “reset and run”
+解决2： 重新拔插一下电源
+
+
+3. 在c011的一个工程里，全文件搜索LL_RCC_ADC_CLKSOURCE_SYSCLK，不能搜到。而在另一个工程里面却可以搜索到
+答： 先完全编译，然后再搜索，即ok
+
+
+4： NRF_TIMER_TASK_CAPTURE0 和 NRF_TIMER_EVENT_COMPARE0   区别    （参考nrf52）
+
+答： NRF_TIMER_TASK_CAPTURE0	“拍照”   -- 立刻把当前 COUNTER 快照复制到 CC[0]               //easy，外部 → Timer（存数）            
+       NRF_TIMER_EVENT_COMPARE0	“闹铃响” -- 当 COUNTER == CC[0]，硬件自动产生 COMPARE0 事件   //easy，Timer → 向外发出信号
+
+     拍照确实会改变门槛值，因为本来就是要重新设置门槛值 （如当前拍照值 + 1000），所有临时改变没有关系
+
+
+
