@@ -3,3 +3,68 @@
 
 答： 终于解决了这个问题。之前没在项目的 .syscfg 中禁用“Startup File Reference”（启动文件引用）的自动生成功能，导致编译器使用自动生成的启动文件
       https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1502372/mspm0g1507-mspm0g1507-application-not-working-after-uploaded-txt-file-through-custom-bsl
+
+
+2. 从G3507
+改成 G1507  （移植 + 添加led）    //待验证
+
+   https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1527942/mspm0g1507-bsl-flash-based-plug-in-uart-sample-code---migration-to-mspm0g1507?tisearch=e2e-sitesearch&keymatch=MSPM0G1507#
+
+      在 `sysconf` 中更改了封装（package）
+      并在编译器设置中修改了全局符号（将 `__MSPM0G3507__` 改为 `__MSPM0G1507__`）
+      修正了链接器命令文件（linker cmd file）中的地址
+       SRAM_INT_VECS(RWX)		:    org = 0x20200000     //正确
+       SRAM_INT_VECS(RWX)		:    org = 0x20000000     //错误
+
+
+      豆豆：
+      。打开 .syscfg，顶部器件型号从 MSPM0G3507 修改为 MSPM0G1507，SysConfig 自动校验外设冲突；
+      。重新生成 ti_msp_dl_config.c/h；
+      。Keil/CCS 工程目标器件同步改成 MSPM0G1507；
+      。重新编译全部工程，下载。
+
+
+3. 用jlink对芯片做出厂设置   //待验证
+
+   下载bat文件
+
+   https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1639863/mspm0g1507-how-to-perform-factory-reset-using-jlink?tisearch=e2e-sitesearch&keymatch=MSPM0G1507#
+
+      MSPM0G1507
+      MSPM0G3507
+      MSPM0L1105
+      MSPM0L1306
+      MSPM0C1103
+      MSPM0C1104
+
+4. BSL_GUI_EXE 工具最新下载的地方  （有python源码）
+    https://translate.google.com/?hl=zh-cn&sl=en&tl=zh-CN&text=This%20thread%20just%20for%20update%20the%20BSL_GUI_EXE.%20Due%20to%20some%20software%20release%20limitation%2C%20we%20can%27t%20put%20the%20MSPM0_BSL_GUI.exe%20file%20into%20our%20SDK%20%3C%20%E2%80%A6%5Cmspm0_sdk_xxxx%5Ctools%5Cbsl%5CBSL_GUI_EXE%20%3E.%0A%0AIt%20need%20customer%20use%20the%20source%20file%20to%20generate%20the%20MSPM0_BSL_GUI.exe%20with%20the%20open%20source%20file%20in%20the%20folder%20BSL_GUI_source_code.%20More%20details%20please%20refer%20to%20README%20file.%20But%20it%20need%20to%20install%20some%20python%20and%20some%20support%20packages%20environment%20that%20may%20block%20some%20users.%20Here%20I%20will%20put%20the%20MSPM0_BSL_GUI.exe%20file%20here%20and%20you%20just%20need%20to%20download%20and%20unzip&op=translate
+
+
+5. 关于使用adc序列   //待了解
+   https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1566782/mspm0g1507-adc_singlechannel_lp_mspm0g3507_freertos_ticlang?tisearch=e2e-sitesearch&keymatch=MSPM0G1507#
+
+    https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1568114/mspm0g1507-adc12_sequence_conversion?tisearch=e2e-sitesearch&keymatch=MSPM0G1507#
+
+    https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1565173/mspm0g1507-adc?tisearch=e2e-sitesearch&keymatch=MSPM0G1507#
+
+    https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1578618/mspm0g1507-mspm0-adc-time-sampling-2?tisearch=e2e-sitesearch&keymatch=MSPM0G1507#
+
+   https://translate.google.com/?hl=zh-cn&sl=en&tl=zh-CN&text=The%20data%20sheet%20spec%20it%20is%20across%20temperature.%20The%20calculation%20I%20provide%20above%20is%20using%20the%20worst-case%20output%20error%20across%20temperature.%20Please%20let%20me%20know%20if%20that%20helps.&op=translate         //adc误差，温度影响
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
