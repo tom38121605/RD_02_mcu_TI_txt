@@ -52,6 +52,17 @@
 
    https://translate.google.com/?hl=zh-cn&sl=en&tl=zh-CN&text=The%20data%20sheet%20spec%20it%20is%20across%20temperature.%20The%20calculation%20I%20provide%20above%20is%20using%20the%20worst-case%20output%20error%20across%20temperature.%20Please%20let%20me%20know%20if%20that%20helps.&op=translate         //adc误差，温度影响
 
+    https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1590338/mspm0g1507-handling-of-vref---pins-when-using-vref-internally?tisearch=e2e-sitesearch&keymatch=MSPM0G1507#   //关于vref悬空
+
+    https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1519599/mspm0g1507-migration     //在sysconfig中设置adc平均值，设置 cc shadow功能
+
+   https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1527402/mspm0g1507-adc-settings?tisearch=e2e-sitesearch&keymatch=MSPM0G1507#   //使用pwm事件触发adc，有示例参考
+
+
+
+
+
+
 
 
 
