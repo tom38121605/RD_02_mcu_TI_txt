@@ -1,0 +1,51 @@
+
+
+
+
+uint32_t period = 32000;
+
+void Set_Duty(float duty, uint8_t channel)
+{
+    uint32_t CompareValue;
+    CompareValue = period - period*duty;
+
+    if(channel == 0)
+    {
+        DL_TimerG_setCaptureCompareValue(PWM_0_INST, CompareValue, DL_TIMER_CC_0_INDEX);
+    }
+    else
+    {
+        DL_TimerG_setCaptureCompareValue(PWM_0_INST, CompareValue, DL_TIMER_CC_1_INDEX);
+    }
+}
+
+
+void Set_Freq(uint32_t freq)
+{
+    if(freq == 0U) return;
+
+    uint32_t load_val = PWM_0_INST_CLK_FREQ / freq - 1U;
+    DL_TimerG_setLoadValue(PWM_0_INST, load_val);
+    period = load_val + 1U;
+}
+
+ 
+
+
+====================================================
+
+
+void Set_Duty(float duty, uint8_t channel)
+{
+    uint32_t CompareValue;
+    CompareValue = 32000 - 32000*duty;
+
+    if(channel == 0)
+    {
+        DL_TimerG_setCaptureCompareValue(PWM_0_INST, CompareValue, DL_TIMER_CC_0_INDEX);
+    }
+    else if(channel == 1)
+    {
+        DL_TimerG_setCaptureCompareValue(PWM_0_INST, CompareValue, DL_TIMER_CC_1_INDEX);
+    }
+}

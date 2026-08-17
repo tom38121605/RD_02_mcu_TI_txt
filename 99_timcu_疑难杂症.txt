@@ -41,7 +41,40 @@
     https://translate.google.com/?hl=zh-cn&sl=en&tl=zh-CN&text=This%20thread%20just%20for%20update%20the%20BSL_GUI_EXE.%20Due%20to%20some%20software%20release%20limitation%2C%20we%20can%27t%20put%20the%20MSPM0_BSL_GUI.exe%20file%20into%20our%20SDK%20%3C%20%E2%80%A6%5Cmspm0_sdk_xxxx%5Ctools%5Cbsl%5CBSL_GUI_EXE%20%3E.%0A%0AIt%20need%20customer%20use%20the%20source%20file%20to%20generate%20the%20MSPM0_BSL_GUI.exe%20with%20the%20open%20source%20file%20in%20the%20folder%20BSL_GUI_source_code.%20More%20details%20please%20refer%20to%20README%20file.%20But%20it%20need%20to%20install%20some%20python%20and%20some%20support%20packages%20environment%20that%20may%20block%20some%20users.%20Here%20I%20will%20put%20the%20MSPM0_BSL_GUI.exe%20file%20here%20and%20you%20just%20need%20to%20download%20and%20unzip&op=translate
 
 
-5. 关于使用adc序列   //待了解
+5. 软件打断点
+
+    __BKPT(0);
+
+
+6. 在empty_led工程里添加mathacl
+    。 添加 iqmath.a 库文件
+        .  在lib组下，添加文件： D:\ti\mspm0_sdk_2_05_01_00\source\ti\iqmath\lib\iar\m0p\mathacl\mspm0g1x0x_g3x0x\ iqmath.a
+        .  工程里选中 iqmath.a，右键?Options?File，把文件类型改成 Library file
+
+    。 添加下面的include
+        .  D:\ti\mspm0_sdk_2_05_01_00\source\ti\iqmath\include
+        .  D:\ti\mspm0_sdk_2_05_01_00\source\ti\iqmath\_IQNfunctions
+
+    。 把 mathacl的c文件 
+        .  新建一个组 mathacl
+        . 把目录D:\ti\mspm0_sdk_2_05_01_00\source\ti\iqmath\_IQNfunctions，里面的c文件全部添加進来
+
+    。编译，ok
+   
+
+7.  printf功能的实现
+
+    。在魔法棒里面  --  target  --  勾选 "user micro LIB“
+
+
+
+
+
+
+
+
+
+99. 关于使用adc序列   //待了解
    https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1566782/mspm0g1507-adc_singlechannel_lp_mspm0g3507_freertos_ticlang?tisearch=e2e-sitesearch&keymatch=MSPM0G1507#
 
     https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1568114/mspm0g1507-adc12_sequence_conversion?tisearch=e2e-sitesearch&keymatch=MSPM0G1507#
