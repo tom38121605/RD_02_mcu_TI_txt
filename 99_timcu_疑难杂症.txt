@@ -66,8 +66,42 @@
 
     。在魔法棒里面  --  target  --  勾选 "user micro LIB“
 
+         #include "stdio.h"
+         #include "string.h"
 
+         int fputc(int c, FILE* stream);
+         int fputs(const char* restrict s, FILE* restrict stream);
+         int puts(const char *ptr);
 
+         int main(void)
+             while (1)            
+                 printf("Hello %d", 888);
+
+         ----------
+
+         int fputc(int c, FILE* stream)
+         {
+             DL_UART_Main_transmitDataBlocking(UART_0_INST, c);
+             return c;
+         }
+
+         int fputs(const char* restrict s, FILE* restrict stream)
+         {
+             uint16_t i, len;
+             len = strlen(s);
+             for(i=0; i<len; i++)
+             {
+                 DL_UART_Main_transmitDataBlocking(UART_0_INST, s[i]);
+             }
+             return len;
+         }
+
+         int puts(const char *ptr)
+         {
+             int count = fputs(ptr, stdout);
+             count += fputs("\n", stdout);
+             return count;
+         }
 
 
 

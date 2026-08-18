@@ -1,0 +1,12 @@
+
+1.  在keil中 LaunchPad官板上下载，出现下面提示：   (用另外一个 keil 工程可以正常烧录)
+     Error: Flash Download failed - "Cortex?M0+"
+
+解决：  去掉 microlib 勾选，再编译下载，就可以了
+
+
+
+
+
+
+
