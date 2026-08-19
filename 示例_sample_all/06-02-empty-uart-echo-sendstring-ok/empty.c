@@ -49,8 +49,7 @@ int main(void)
     NVIC_ClearPendingIRQ(UART_0_INST_INT_IRQN);
     NVIC_EnableIRQ(UART_0_INST_INT_IRQN);
     gEchoData = DL_UART_Main_receiveData(UART_0_INST);   //--add
-    
-    DL_SYSCTL_enableSleepOnExit();
+
 
     while (1) 
     {
