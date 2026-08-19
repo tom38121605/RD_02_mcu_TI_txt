@@ -32,28 +32,18 @@
 
 #include "ti_msp_dl_config.h"
 
-
-void delay(void)
-{
-    //for(int i=0;i<5000;i++)
-    for(int i=0;i<50;i++)
-    {
-        for(int j=0;j<8000;j++)
-        {
-            __asm("nop");
-        }
-    }
-}
-
-
 int main(void)
 {
     SYSCFG_DL_init();
 
     while (1) 
     {
-        delay();
+        delay_cycles(32000000/5);
+        
         DL_GPIO_togglePins(LED_PORT, LED_PIN_0_PIN);
-    
     }
+    
 }
+
+
+

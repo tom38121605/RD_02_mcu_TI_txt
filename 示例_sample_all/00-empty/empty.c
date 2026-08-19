@@ -32,54 +32,10 @@
 
 #include "ti_msp_dl_config.h"
 
-#include "stdio.h"
-#include "string.h"
-
-
-void SendString(char *str);
-char txBuf[100];
-
-
-
-volatile uint8_t gEchoData = 0;
 int main(void)
 {
     SYSCFG_DL_init();
 
-    NVIC_ClearPendingIRQ(UART_0_INST_INT_IRQN);
-    NVIC_EnableIRQ(UART_0_INST_INT_IRQN);
-    gEchoData = DL_UART_Main_receiveData(UART_0_INST);   //--add
-    
-    
-    while (1) 
-    {
-        delay_cycles(32000000);
-        
-        sprintf(txBuf, "tst %d\r\n", 100);
-        SendString(txBuf);       
-
-    }
-}
-
-void UART_0_INST_IRQHandler(void)
-{
-    switch (DL_UART_Main_getPendingInterrupt(UART_0_INST)) 
-    {
-        case DL_UART_MAIN_IIDX_RX:
-
-            gEchoData = DL_UART_Main_receiveData(UART_0_INST);
-            DL_UART_Main_transmitData(UART_0_INST, gEchoData);
-            break;
-        default:
-            break;
-    }
-}
-
-
-void SendString(char *str)
-{
-    while(*str != '\0')
-    {
-        DL_UART_Main_transmitDataBlocking(UART_0_INST, *str++);
+    while (1) {
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Texas Instruments Incorporated
+ * Copyright (c) 2023, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,56 +30,57 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/*
+ *  ============ ti_msp_dl_config.c =============
+ *  Configured MSPM0 DriverLib module definitions
+ *
+ *  DO NOT EDIT - This file is generated for the LP_MSPM0G3507
+ *  by the SysConfig tool.
+ */
+
 #include "ti_msp_dl_config.h"
 
-#include "stdio.h"
-#include "string.h"
-
-
-void SendString(char *str);
-char txBuf[100];
-
-
-
-volatile uint8_t gEchoData = 0;
-int main(void)
+/*
+ *  ======== SYSCFG_DL_init ========
+ *  Perform any initialization needed before using any board APIs
+ */
+SYSCONFIG_WEAK void SYSCFG_DL_init(void)
 {
-    SYSCFG_DL_init();
-
-    NVIC_ClearPendingIRQ(UART_0_INST_INT_IRQN);
-    NVIC_EnableIRQ(UART_0_INST_INT_IRQN);
-    gEchoData = DL_UART_Main_receiveData(UART_0_INST);   //--add
-    
-    
-    while (1) 
-    {
-        delay_cycles(32000000);
-        
-        sprintf(txBuf, "tst %d\r\n", 100);
-        SendString(txBuf);       
-
-    }
+    SYSCFG_DL_initPower();
+    SYSCFG_DL_GPIO_init();
+    /* Module-Specific Initializations*/
+    SYSCFG_DL_SYSCTL_init();
 }
 
-void UART_0_INST_IRQHandler(void)
+SYSCONFIG_WEAK void SYSCFG_DL_initPower(void)
 {
-    switch (DL_UART_Main_getPendingInterrupt(UART_0_INST)) 
-    {
-        case DL_UART_MAIN_IIDX_RX:
+    DL_GPIO_reset(GPIOA);
+    DL_GPIO_reset(GPIOB);
 
-            gEchoData = DL_UART_Main_receiveData(UART_0_INST);
-            DL_UART_Main_transmitData(UART_0_INST, gEchoData);
-            break;
-        default:
-            break;
-    }
+    DL_GPIO_enablePower(GPIOA);
+    DL_GPIO_enablePower(GPIOB);
+    delay_cycles(POWER_STARTUP_DELAY);
+}
+
+SYSCONFIG_WEAK void SYSCFG_DL_GPIO_init(void)
+{
+
 }
 
 
-void SendString(char *str)
+SYSCONFIG_WEAK void SYSCFG_DL_SYSCTL_init(void)
 {
-    while(*str != '\0')
-    {
-        DL_UART_Main_transmitDataBlocking(UART_0_INST, *str++);
-    }
+
+	//Low Power Mode is configured to be SLEEP0
+    DL_SYSCTL_setBORThreshold(DL_SYSCTL_BOR_THRESHOLD_LEVEL_0);
+
+    DL_SYSCTL_setSYSOSCFreq(DL_SYSCTL_SYSOSC_FREQ_BASE);
+    /* Set default configuration */
+    DL_SYSCTL_disableHFXT();
+    DL_SYSCTL_disableSYSPLL();
+    DL_SYSCTL_setULPCLKDivider(DL_SYSCTL_ULPCLK_DIV_1);
+    DL_SYSCTL_setMCLKDivider(DL_SYSCTL_MCLK_DIVIDER_DISABLE);
+
 }
+
+

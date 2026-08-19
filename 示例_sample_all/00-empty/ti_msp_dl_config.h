@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Texas Instruments Incorporated
+ * Copyright (c) 2023, Texas Instruments Incorporated - http://www.ti.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,56 +30,62 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "ti_msp_dl_config.h"
+/*
+ *  ============ ti_msp_dl_config.h =============
+ *  Configured MSPM0 DriverLib module declarations
+ *
+ *  DO NOT EDIT - This file is generated for the LP_MSPM0G3507
+ *  by the SysConfig tool.
+ */
+#ifndef ti_msp_dl_config_h
+#define ti_msp_dl_config_h
 
-#include "stdio.h"
-#include "string.h"
+#define CONFIG_LP_MSPM0G3507
+#define CONFIG_MSPM0G3507
+
+#if defined(__ti_version__) || defined(__TI_COMPILER_VERSION__)
+#define SYSCONFIG_WEAK __attribute__((weak))
+#elif defined(__IAR_SYSTEMS_ICC__)
+#define SYSCONFIG_WEAK __weak
+#elif defined(__GNUC__)
+#define SYSCONFIG_WEAK __attribute__((weak))
+#endif
+
+#include <ti/devices/msp/msp.h>
+#include <ti/driverlib/driverlib.h>
+#include <ti/driverlib/m0p/dl_core.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/*
+ *  ======== SYSCFG_DL_init ========
+ *  Perform all required MSP DL initialization
+ *
+ *  This function should be called once at a point before any use of
+ *  MSP DL.
+ */
 
 
-void SendString(char *str);
-char txBuf[100];
+/* clang-format off */
+
+#define POWER_STARTUP_DELAY                                                (16)
 
 
+#define CPUCLK_FREQ                                                     32000000
 
-volatile uint8_t gEchoData = 0;
-int main(void)
-{
-    SYSCFG_DL_init();
 
-    NVIC_ClearPendingIRQ(UART_0_INST_INT_IRQN);
-    NVIC_EnableIRQ(UART_0_INST_INT_IRQN);
-    gEchoData = DL_UART_Main_receiveData(UART_0_INST);   //--add
-    
-    
-    while (1) 
-    {
-        delay_cycles(32000000);
-        
-        sprintf(txBuf, "tst %d\r\n", 100);
-        SendString(txBuf);       
+/* clang-format on */
 
-    }
+void SYSCFG_DL_init(void);
+void SYSCFG_DL_initPower(void);
+void SYSCFG_DL_GPIO_init(void);
+void SYSCFG_DL_SYSCTL_init(void);
+
+
+#ifdef __cplusplus
 }
+#endif
 
-void UART_0_INST_IRQHandler(void)
-{
-    switch (DL_UART_Main_getPendingInterrupt(UART_0_INST)) 
-    {
-        case DL_UART_MAIN_IIDX_RX:
-
-            gEchoData = DL_UART_Main_receiveData(UART_0_INST);
-            DL_UART_Main_transmitData(UART_0_INST, gEchoData);
-            break;
-        default:
-            break;
-    }
-}
-
-
-void SendString(char *str)
-{
-    while(*str != '\0')
-    {
-        DL_UART_Main_transmitDataBlocking(UART_0_INST, *str++);
-    }
-}
+#endif /* ti_msp_dl_config_h */
