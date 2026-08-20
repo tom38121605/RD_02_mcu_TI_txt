@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Texas Instruments Incorporated
+ * Copyright (c) 2021, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,37 +32,54 @@
 
 #include "ti_msp_dl_config.h"
 
+#define PWM_PERIOD 32000
+uint32_t iperiod = PWM_PERIOD;
 
-void Set_Duty(float duty, uint8_t channel)
+void pwm_setduty(float duty, uint8_t ichannel);
+void pwm_setfreq(uint32_t ifreq);
+
+
+void pwm_setduty(float duty, uint8_t ichannel)  //To be verified
 {
-    uint32_t CompareValue;
-    CompareValue = 32000 - 32000*duty;
+    uint32_t icomparevalue;
+    icomparevalue = iperiod - iperiod*duty;   
 
-    if(channel == 0)
+    if(ichannel == 0)
     {
-        DL_TimerG_setCaptureCompareValue(PWM_0_INST, CompareValue, DL_TIMER_CC_0_INDEX);
+        DL_TimerG_setCaptureCompareValue(PWM_0_INST, icomparevalue, DL_TIMER_CC_0_INDEX);
     }
-    else if(channel == 1)
+    else if(ichannel == 1)
     {
-        DL_TimerG_setCaptureCompareValue(PWM_0_INST, CompareValue, DL_TIMER_CC_1_INDEX);
+        DL_TimerG_setCaptureCompareValue(PWM_0_INST, icomparevalue, DL_TIMER_CC_1_INDEX);
     }
 }
 
 
+void pwm_setfreq(uint32_t ifreq)     //To be verified
+{
+    if(ifreq == 0U) return;
+
+    uint32_t iloadval = PWM_0_INST_CLK_FREQ / ifreq - 1U;
+
+    DL_TimerG_setLoadValue(PWM_0_INST, iloadval);
+
+    iperiod = iloadval + 1U;
+}
+
 int main(void)
 {
     SYSCFG_DL_init();
-
+    
     DL_TimerG_startCounter(PWM_0_INST);
     
-    Set_Duty(0.7, 0);
-    Set_Duty(0.5, 1);    
-
-    while (1)     
-    {
-
     
-        //__WFI();
+    pwm_setfreq(500);
+    
+    pwm_setduty(0.5, 0);
+    pwm_setduty(0.8, 1);   
+    
 
+    while (1) 
+    {
     }
 }

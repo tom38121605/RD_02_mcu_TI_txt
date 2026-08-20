@@ -35,7 +35,7 @@
 <div id="content">
   <h1>Readme</h1>
 <h2 id="example-summary">Example Summary</h2>
-<p>The following example configures TimerG0 to output a pair of edge aligned PWM signals. The device is configured to wait in SLEEP mode.</p>
+<p>Empty project using DriverLib. This example shows a basic empty project using DriverLib with just main file and SysConfig initialization.</p>
 <h2 id="peripherals-pin-assignments">Peripherals &amp; Pin Assignments</h2>
 <table>
 <thead>
@@ -52,26 +52,11 @@
 <td></td>
 </tr>
 <tr class="even">
-<td>TIMG0</td>
-<td>PA12</td>
-<td>Capture/Compare Pin 0</td>
-</tr>
-<tr class="odd">
-<td>TIMG0</td>
-<td>PA13</td>
-<td>Capture/Compare Pin 1</td>
-</tr>
-<tr class="even">
-<td>EVENT</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
 <td>DEBUGSS</td>
 <td>PA20</td>
 <td>Debug Clock</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>DEBUGSS</td>
 <td>PA19</td>
 <td>Debug Data In Out</td>
@@ -91,20 +76,6 @@
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>PA12</td>
-<td>TIMG0</td>
-<td>CCP0</td>
-<td>J4_32/J26_1</td>
-<td><ul><li>PA12 can be connected to CAN/LIN connector in addition to boosterpack connector:<br><ul><li>To use on J26 CAN/LIN connector:<br> <code>R64</code> is populated by default and connects pin to <code>J26_1</code></ul></ul></td>
-</tr>
-<tr class="even">
-<td>PA13</td>
-<td>TIMG0</td>
-<td>CCP1</td>
-<td>J4_32/J26_3</td>
-<td><ul><li>PA13 can be connected to CAN/LIN connector in addition to boosterpack connector:<br><ul><li>To use on J26 CAN/LIN connector:<br> <code>R65</code> is populated by default and connects pin to <code>J26_3</code></ul></ul></td>
-</tr>
 <tr class="odd">
 <td>PA20</td>
 <td>DEBUGSS</td>
@@ -128,7 +99,7 @@
 <p>SysConfig allows developers to easily configure unused pins by selecting <strong>Board</strong>→<strong>Configure Unused Pins</strong>.</p>
 <p>For more information about jumper configuration to achieve low-power using the MSPM0 LaunchPad, please visit the <a href="https://www.ti.com/lit/slau873">LP-MSPM0G3507 User’s Guide</a>.</p>
 <h2 id="example-usage">Example Usage</h2>
-<p>Compile, load and run the example. TimerG0 will output a pair of 62.5Hz edge aligned PWM signals on PA12 and PA13. PA12 is configured at a 75% duty cycle. PA13 is configured at a 50% duty cycle. Monitor the PWM signals on PA12 and PA13.</p>
+<p>Compile, load and run the example.</p>
 <!-- Close div from before_body_template.html -->
 </div>
 <footer id="tiFooter">
