@@ -31,7 +31,6 @@
  */
 
 
-//#include "dl_core.h"
 #include "ti_msp_dl_config.h"
 #include "stdio.h"
 #include "string.h"
@@ -45,28 +44,61 @@ char txBuf[100];
 volatile bool gCheckADC;
 volatile uint16_t gAdcResult;
 
+
+
+void delay_ms(uint32_t ms)
+{
+    while(ms--)
+    {
+        delay_cycles(CPUCLK_FREQ/1000);
+    }
+}
+
+
 int main(void)
 {
     SYSCFG_DL_init();
 
     NVIC_EnableIRQ(ADC12_0_INST_INT_IRQN);
-    gCheckADC = false;
+
 
     while (1) 
     {
-        delay_cycles(32000000);
+
+        //delay_ms(1000);
+        delay_ms(2);
+ 
         
+        gCheckADC = false;
         DL_ADC12_startConversion(ADC12_0_INST);
 
         while (false == gCheckADC) ;
 
         gAdcResult = DL_ADC12_getMemResult(ADC12_0_INST, DL_ADC12_MEM_IDX_0);
+        
         sprintf(txBuf, "adc2 %d\r\n", gAdcResult);
         SendString(txBuf);       
 
-        gCheckADC = false;
         DL_ADC12_enableConversions(ADC12_0_INST);
     }
+
+
+//while (1) 
+//{
+//    delay_ms(1000);
+//    
+//    DL_ADC12_enableConversions(ADC12_0_INST);
+//    DL_ADC12_startConversion(ADC12_0_INST);
+
+//    // 轮询等待转换完成，不需要中断
+//    while (DL_ADC12_getPendingInterrupt(ADC12_0_INST) != DL_ADC12_IIDX_MEM0_RESULT_LOADED);
+
+//    gAdcResult = DL_ADC12_getMemResult(ADC12_0_INST, DL_ADC12_MEM_IDX_0);
+//    
+//    sprintf(txBuf, "adc2 %d\r\n", gAdcResult);
+//    SendString(txBuf);       
+//}
+
 }
 
 void ADC12_0_INST_IRQHandler(void)
@@ -79,8 +111,6 @@ void ADC12_0_INST_IRQHandler(void)
             break;
     }
 }
-
-
 
 void SendString(char *str)
 {

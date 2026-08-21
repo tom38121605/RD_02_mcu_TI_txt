@@ -25,6 +25,7 @@ ADC121.adcMem0chansel             = "DL_ADC12_INPUT_CHAN_2";
 ADC121.enabledInterrupts          = ["DL_ADC12_INTERRUPT_MEM0_RESULT_LOADED"];
 ADC121.sampClkDiv                 = "DL_ADC12_CLOCK_DIVIDE_8";
 ADC121.sampClkSrc                 = "DL_ADC12_CLOCK_ULPCLK";
+ADC121.sampleTime0                = "125us";
 ADC121.peripheral.adcPin2.$assign = "PA25";
 ADC121.adcPin2Config.$name        = "ti_driverlib_gpio_GPIOPinGeneric2";
 
@@ -38,6 +39,7 @@ GPIO1.associatedPins[0].assignedPin  = "0";
 SYSCTL.forceDefaultClkConfig = true;
 
 UART1.$name                    = "UART_0";
+UART1.targetBaudRate           = 115200;
 UART1.peripheral.rxPin.$assign = "PA11";
 UART1.peripheral.txPin.$assign = "PA10";
 UART1.txPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric0";

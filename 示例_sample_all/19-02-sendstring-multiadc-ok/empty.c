@@ -45,6 +45,14 @@ volatile uint16_t iadcval0;
 volatile uint16_t iadcval1;
 
 
+void delay_ms(uint32_t ms)
+{
+    while(ms--)
+    {
+        delay_cycles(CPUCLK_FREQ/1000);
+    }
+}
+
 
 int main(void)
 {
@@ -62,7 +70,7 @@ int main(void)
 
     while (1) 
     {
-        delay_cycles(32000000);
+        delay_ms(10);
         
         gCheckADC  = false;
         DL_ADC12_startConversion(ADC12_0_INST);
