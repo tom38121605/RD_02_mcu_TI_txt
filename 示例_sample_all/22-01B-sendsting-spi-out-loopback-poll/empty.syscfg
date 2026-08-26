@@ -20,7 +20,10 @@ const UART1  = UART.addInstance();
  */
 SPI1.$name                      = "SPI_0";
 SPI1.targetBitRate              = 500000;
+SPI1.peripheral.sclkPin.$assign = "PA17";
 SPI1.peripheral.mosiPin.$assign = "PA18";
+SPI1.peripheral.misoPin.$assign = "PA16";
+SPI1.peripheral.cs0Pin.$assign  = "PB6";
 SPI1.sclkPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric2";
 SPI1.mosiPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric3";
 SPI1.misoPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric4";
@@ -44,9 +47,6 @@ UART1.rxPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric1";
  * re-solve from scratch.
  */
 SPI1.peripheral.$suggestSolution           = "SPI1";
-SPI1.peripheral.sclkPin.$suggestSolution   = "PA17";
-SPI1.peripheral.misoPin.$suggestSolution   = "PA16";
-SPI1.peripheral.cs0Pin.$suggestSolution    = "PA2";
 Board.peripheral.$suggestSolution          = "DEBUGSS";
 Board.peripheral.swclkPin.$suggestSolution = "PA20";
 Board.peripheral.swdioPin.$suggestSolution = "PA19";

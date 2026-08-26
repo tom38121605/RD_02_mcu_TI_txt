@@ -114,10 +114,10 @@ extern "C" {
 #define GPIO_SPI_0_SCLK_PIN                                      DL_GPIO_PIN_17
 #define GPIO_SPI_0_IOMUX_SCLK                                   (IOMUX_PINCM39)
 #define GPIO_SPI_0_IOMUX_SCLK_FUNC                   IOMUX_PINCM39_PF_SPI1_SCLK
-#define GPIO_SPI_0_CS0_PORT                                               GPIOA
-#define GPIO_SPI_0_CS0_PIN                                        DL_GPIO_PIN_2
-#define GPIO_SPI_0_IOMUX_CS0                                     (IOMUX_PINCM7)
-#define GPIO_SPI_0_IOMUX_CS0_FUNC                      IOMUX_PINCM7_PF_SPI1_CS0
+#define GPIO_SPI_0_CS0_PORT                                               GPIOB
+#define GPIO_SPI_0_CS0_PIN                                        DL_GPIO_PIN_6
+#define GPIO_SPI_0_IOMUX_CS0                                    (IOMUX_PINCM23)
+#define GPIO_SPI_0_IOMUX_CS0_FUNC                     IOMUX_PINCM23_PF_SPI1_CS0
 
 /* clang-format on */
 
