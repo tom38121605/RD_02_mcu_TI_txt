@@ -5,8 +5,117 @@
 解决：  去掉 microlib 勾选，再编译下载，就可以了
 
 
+2.  在keil中，使用ti官板自带的xs110烧录时，跳出以下错误提示
+      Cannot load flash programming Algorithm！ 按“确定”后，继续跳出以下信息
+      Error： Flash download failed  - "cortex-M0+"
 
+分析：  在led的基础上加上adc的dma处理，并把中断里的处理，打flg到while中处理
+分析2：  或在烧录器还没進入烧录状态时，dma已开始动作，跟烧录器发生冲突
 
+解决：   下面是完成main.c中的代码：   在while前面加 delay_ms(10);就解决了    （先用uniflash烧录一个不锁的hex文件，再如下修改）  
+
+         #include "ti/driverlib/dl_adc12.h"
+         #include "ti_msp_dl_config.h"
+
+         #define ADC_BUF_LEN   10
+         uint16_t gADCSamples[ADC_BUF_LEN];
+
+         #include "stdio.h"
+         #include "string.h"
+
+         void SendString(char *str);
+         char txBuf[100];
+
+         volatile uint8_t flg_adcin = 0;
+
+         void delay_ms(uint32_t ms)
+         {
+             while(ms--)
+             {
+                 delay_cycles(CPUCLK_FREQ/1000);
+             }
+         }
+
+         int main(void)
+         {
+             SYSCFG_DL_init();
+
+         ////    DL_DMA_setSrcAddr(DMA, DMA_CH0_CHAN_ID, DL_ADC12_getMemResultAddress(ADC12_0_INST,DL_ADC12_MEM_IDX_0 ) );////    
+         ////    DL_DMA_setDestAddr(DMA, DMA_CH0_CHAN_ID, (uint32_t)&gADCSamples[0]);
+         ////    DL_DMA_enableChannel(DMA, DMA_CH0_CHAN_ID);
+         ////    NVIC_EnableIRQ(ADC12_0_INST_INT_IRQN);
+         ////    DL_ADC12_startConversion(ADC12_0_INST);
+             
+             
+             //DMA源：MEM0存储器地址
+             DL_DMA_setSrcAddr(DMA, DMA_CH0_CHAN_ID, DL_ADC12_getMemResultAddress(ADC12_0_INST, DL_ADC12_MEM_IDX_0));
+             DL_DMA_setDestAddr(DMA, DMA_CH0_CHAN_ID, (uint32_t)&gADCSamples[0]);
+             DL_DMA_setTransferSize(DMA, DMA_CH0_CHAN_ID, ADC_BUF_LEN);
+             
+             DL_DMA_setSrcIncrement(DMA, DMA_CH0_CHAN_ID, DL_DMA_ADDR_UNCHANGED);
+             DL_DMA_setDestIncrement(DMA, DMA_CH0_CHAN_ID, DL_DMA_ADDR_INCREMENT);
+             
+             DL_DMA_setSrcWidth(DMA, DMA_CH0_CHAN_ID, DL_DMA_WIDTH_HALF_WORD);
+             DL_DMA_setDestWidth(DMA, DMA_CH0_CHAN_ID, DL_DMA_WIDTH_HALF_WORD);
+
+             DL_DMA_enableChannel(DMA, DMA_CH0_CHAN_ID);
+
+             DL_ADC12_enableDMA(ADC12_0_INST);
+             DL_ADC12_enableDMATrigger(ADC12_0_INST, DL_ADC12_DMA_MEM0_RESULT_LOADED);
+
+             NVIC_EnableIRQ(ADC12_0_INST_INT_IRQN);
+             DL_ADC12_startConversion(ADC12_0_INST);
+             
+             
+             delay_ms(10);                                                                    //加上这一句就解决了
+
+             while (1)
+             {
+                //delay_ms(1);  //ok
+             
+                if(flg_adcin==1)
+                {
+                    flg_adcin=0;
+                       
+                       
+                    sprintf(txBuf, "adc %d\r\n", gADCSamples[0]);
+                    SendString(txBuf);              
+                   
+                    DL_ADC12_enableConversions(ADC12_0_INST);
+                    DL_ADC12_startConversion(ADC12_0_INST);          
+                
+                }
+
+             }
+         }
+
+         void ADC12_0_INST_IRQHandler(void)
+         {
+             switch (DL_ADC12_getPendingInterrupt(ADC12_0_INST))
+             {
+                 case DL_ADC12_IIDX_DMA_DONE:
+                     DL_ADC12_disableConversions(ADC12_0_INST);
+                     
+                     //Process
+                     //__BKPT();
+                     
+                     flg_adcin = 1;
+                     
+                     //DL_ADC12_enableConversions(ADC12_0_INST);
+                     //DL_ADC12_startConversion(ADC12_0_INST);
+                     break;
+                 default:
+                     break;
+             }
+         }
+
+         void SendString(char *str)
+         {
+             while(*str != '\0')
+             {
+                 DL_UART_Main_transmitDataBlocking(UART_0_INST, *str++);
+             }
+         }
 
 
 
