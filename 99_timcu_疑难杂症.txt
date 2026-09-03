@@ -104,6 +104,22 @@
          }
 
 
+8. 一个spi从机的程序， 为什么把SPI-0的名字改成SPI-1, 再从新编译和烧录，就出现错误，返回到主机的都是0
+
+答： 原因是中断处理函数名称没有改， 修改如下：
+
+
+        
+void SPI_0_INST_IRQHandler(void)
+
+       // err
+
+        void SPI_1_INST_IRQHandler(void)      // ok
+
+
+
+
+
 
 
 
