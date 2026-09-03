@@ -21,23 +21,23 @@ Section Cross References
     ti_msp_dl_config.o(.text.SYSCFG_DL_init) refers to ti_msp_dl_config.o(.text.SYSCFG_DL_initPower) for SYSCFG_DL_initPower
     ti_msp_dl_config.o(.text.SYSCFG_DL_init) refers to ti_msp_dl_config.o(.text.SYSCFG_DL_GPIO_init) for SYSCFG_DL_GPIO_init
     ti_msp_dl_config.o(.text.SYSCFG_DL_init) refers to ti_msp_dl_config.o(.text.SYSCFG_DL_SYSCTL_init) for SYSCFG_DL_SYSCTL_init
-    ti_msp_dl_config.o(.text.SYSCFG_DL_init) refers to ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_0_init) for SYSCFG_DL_SPI_0_init
-    ti_msp_dl_config.o(.text.SYSCFG_DL_init) refers to ti_msp_dl_config.o(.bss.gSPI_0Backup) for gSPI_0Backup
+    ti_msp_dl_config.o(.text.SYSCFG_DL_init) refers to ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_1_init) for SYSCFG_DL_SPI_1_init
+    ti_msp_dl_config.o(.text.SYSCFG_DL_init) refers to ti_msp_dl_config.o(.bss.gSPI_1Backup) for gSPI_1Backup
     ti_msp_dl_config.o(.ARM.exidx.text.SYSCFG_DL_init) refers to ti_msp_dl_config.o(.text.SYSCFG_DL_init) for [Anonymous Symbol]
     ti_msp_dl_config.o(.text.SYSCFG_DL_initPower) refers to dl_common.o(.text.DL_Common_delayCycles) for DL_Common_delayCycles
     ti_msp_dl_config.o(.ARM.exidx.text.SYSCFG_DL_initPower) refers to ti_msp_dl_config.o(.text.SYSCFG_DL_initPower) for [Anonymous Symbol]
     ti_msp_dl_config.o(.ARM.exidx.text.SYSCFG_DL_GPIO_init) refers to ti_msp_dl_config.o(.text.SYSCFG_DL_GPIO_init) for [Anonymous Symbol]
     ti_msp_dl_config.o(.ARM.exidx.text.SYSCFG_DL_SYSCTL_init) refers to ti_msp_dl_config.o(.text.SYSCFG_DL_SYSCTL_init) for [Anonymous Symbol]
-    ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_0_init) refers to dl_spi.o(.text.DL_SPI_setClockConfig) for DL_SPI_setClockConfig
-    ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_0_init) refers to dl_spi.o(.text.DL_SPI_init) for DL_SPI_init
-    ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_0_init) refers to ti_msp_dl_config.o(.rodata.gSPI_0_clockConfig) for [Anonymous Symbol]
-    ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_0_init) refers to ti_msp_dl_config.o(.rodata.gSPI_0_config) for [Anonymous Symbol]
-    ti_msp_dl_config.o(.ARM.exidx.text.SYSCFG_DL_SPI_0_init) refers to ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_0_init) for [Anonymous Symbol]
+    ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_1_init) refers to dl_spi.o(.text.DL_SPI_setClockConfig) for DL_SPI_setClockConfig
+    ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_1_init) refers to dl_spi.o(.text.DL_SPI_init) for DL_SPI_init
+    ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_1_init) refers to ti_msp_dl_config.o(.rodata.gSPI_1_clockConfig) for [Anonymous Symbol]
+    ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_1_init) refers to ti_msp_dl_config.o(.rodata.gSPI_1_config) for [Anonymous Symbol]
+    ti_msp_dl_config.o(.ARM.exidx.text.SYSCFG_DL_SPI_1_init) refers to ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_1_init) for [Anonymous Symbol]
     ti_msp_dl_config.o(.text.SYSCFG_DL_saveConfiguration) refers to dl_spi.o(.text.DL_SPI_saveConfiguration) for DL_SPI_saveConfiguration
-    ti_msp_dl_config.o(.text.SYSCFG_DL_saveConfiguration) refers to ti_msp_dl_config.o(.bss.gSPI_0Backup) for gSPI_0Backup
+    ti_msp_dl_config.o(.text.SYSCFG_DL_saveConfiguration) refers to ti_msp_dl_config.o(.bss.gSPI_1Backup) for gSPI_1Backup
     ti_msp_dl_config.o(.ARM.exidx.text.SYSCFG_DL_saveConfiguration) refers to ti_msp_dl_config.o(.text.SYSCFG_DL_saveConfiguration) for [Anonymous Symbol]
     ti_msp_dl_config.o(.text.SYSCFG_DL_restoreConfiguration) refers to dl_spi.o(.text.DL_SPI_restoreConfiguration) for DL_SPI_restoreConfiguration
-    ti_msp_dl_config.o(.text.SYSCFG_DL_restoreConfiguration) refers to ti_msp_dl_config.o(.bss.gSPI_0Backup) for gSPI_0Backup
+    ti_msp_dl_config.o(.text.SYSCFG_DL_restoreConfiguration) refers to ti_msp_dl_config.o(.bss.gSPI_1Backup) for gSPI_1Backup
     ti_msp_dl_config.o(.ARM.exidx.text.SYSCFG_DL_restoreConfiguration) refers to ti_msp_dl_config.o(.text.SYSCFG_DL_restoreConfiguration) for [Anonymous Symbol]
     dl_common.o(.ARM.exidx.text.DL_Common_delayCycles) refers to dl_common.o(.text.DL_Common_delayCycles) for [Anonymous Symbol]
     dl_spi.o(.ARM.exidx.text.DL_SPI_init) refers to dl_spi.o(.text.DL_SPI_init) for [Anonymous Symbol]
@@ -183,7 +183,7 @@ Removing Unused input sections from the image.
     Removing ti_msp_dl_config.o(.ARM.exidx.text.SYSCFG_DL_initPower), (8 bytes).
     Removing ti_msp_dl_config.o(.ARM.exidx.text.SYSCFG_DL_GPIO_init), (8 bytes).
     Removing ti_msp_dl_config.o(.ARM.exidx.text.SYSCFG_DL_SYSCTL_init), (8 bytes).
-    Removing ti_msp_dl_config.o(.ARM.exidx.text.SYSCFG_DL_SPI_0_init), (8 bytes).
+    Removing ti_msp_dl_config.o(.ARM.exidx.text.SYSCFG_DL_SPI_1_init), (8 bytes).
     Removing ti_msp_dl_config.o(.text.SYSCFG_DL_saveConfiguration), (20 bytes).
     Removing ti_msp_dl_config.o(.ARM.exidx.text.SYSCFG_DL_saveConfiguration), (8 bytes).
     Removing ti_msp_dl_config.o(.text.SYSCFG_DL_restoreConfiguration), (20 bytes).
@@ -367,11 +367,11 @@ Image Symbol Table
     __arm_cp.2_0                             0x0000028c   Number         4  ti_msp_dl_config.o(.text.SYSCFG_DL_GPIO_init)
     __arm_cp.2_1                             0x00000290   Number         4  ti_msp_dl_config.o(.text.SYSCFG_DL_GPIO_init)
     __arm_cp.2_2                             0x00000294   Number         4  ti_msp_dl_config.o(.text.SYSCFG_DL_GPIO_init)
-    [Anonymous Symbol]                       0x00000298   Section        0  ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_0_init)
-    __arm_cp.4_1                             0x000002d8   Number         4  ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_0_init)
-    __arm_cp.4_2                             0x000002dc   Number         4  ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_0_init)
-    __arm_cp.4_3                             0x000002e0   Number         4  ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_0_init)
-    __arm_cp.4_4                             0x000002e4   Number         4  ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_0_init)
+    [Anonymous Symbol]                       0x00000298   Section        0  ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_1_init)
+    __arm_cp.4_1                             0x000002d8   Number         4  ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_1_init)
+    __arm_cp.4_2                             0x000002dc   Number         4  ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_1_init)
+    __arm_cp.4_3                             0x000002e0   Number         4  ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_1_init)
+    __arm_cp.4_4                             0x000002e4   Number         4  ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_1_init)
     [Anonymous Symbol]                       0x000002e8   Section        0  ti_msp_dl_config.o(.text.SYSCFG_DL_SYSCTL_init)
     __arm_cp.3_0                             0x00000320   Number         4  ti_msp_dl_config.o(.text.SYSCFG_DL_SYSCTL_init)
     __arm_cp.3_1                             0x00000324   Number         4  ti_msp_dl_config.o(.text.SYSCFG_DL_SYSCTL_init)
@@ -388,10 +388,10 @@ Image Symbol Table
     __arm_cp.0_1                             0x000003a8   Number         4  empty.o(.text.main)
     __arm_cp.0_2                             0x000003ac   Number         4  empty.o(.text.main)
     __arm_cp.0_3                             0x000003b0   Number         4  empty.o(.text.main)
-    gSPI_0_clockConfig                       0x000003b4   Data           2  ti_msp_dl_config.o(.rodata.gSPI_0_clockConfig)
-    [Anonymous Symbol]                       0x000003b4   Section        0  ti_msp_dl_config.o(.rodata.gSPI_0_clockConfig)
-    gSPI_0_config                            0x000003b6   Data          10  ti_msp_dl_config.o(.rodata.gSPI_0_config)
-    [Anonymous Symbol]                       0x000003b6   Section        0  ti_msp_dl_config.o(.rodata.gSPI_0_config)
+    gSPI_1_clockConfig                       0x000003b4   Data           2  ti_msp_dl_config.o(.rodata.gSPI_1_clockConfig)
+    [Anonymous Symbol]                       0x000003b4   Section        0  ti_msp_dl_config.o(.rodata.gSPI_1_clockConfig)
+    gSPI_1_config                            0x000003b6   Data          10  ti_msp_dl_config.o(.rodata.gSPI_1_config)
+    [Anonymous Symbol]                       0x000003b6   Section        0  ti_msp_dl_config.o(.rodata.gSPI_1_config)
     .bss                                     0x20200000   Section       96  libspace.o(.bss)
     Heap_Mem                                 0x20200090   Data           0  startup_mspm0g350x_uvision.o(HEAP)
     Stack_Mem                                0x20200090   Data         256  startup_mspm0g350x_uvision.o(STACK)
@@ -534,7 +534,7 @@ Image Symbol Table
     DL_SPI_receiveDataBlocking8              0x00000251   Thumb Code    20  dl_spi.o(.text.DL_SPI_receiveDataBlocking8)
     DL_SPI_setClockConfig                    0x00000265   Thumb Code    18  dl_spi.o(.text.DL_SPI_setClockConfig)
     SYSCFG_DL_GPIO_init                      0x00000279   Thumb Code    20  ti_msp_dl_config.o(.text.SYSCFG_DL_GPIO_init)
-    SYSCFG_DL_SPI_0_init                     0x00000299   Thumb Code    64  ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_0_init)
+    SYSCFG_DL_SPI_1_init                     0x00000299   Thumb Code    64  ti_msp_dl_config.o(.text.SYSCFG_DL_SPI_1_init)
     SYSCFG_DL_SYSCTL_init                    0x000002e9   Thumb Code    56  ti_msp_dl_config.o(.text.SYSCFG_DL_SYSCTL_init)
     SYSCFG_DL_init                           0x00000329   Thumb Code    28  ti_msp_dl_config.o(.text.SYSCFG_DL_init)
     SYSCFG_DL_initPower                      0x00000349   Thumb Code    32  ti_msp_dl_config.o(.text.SYSCFG_DL_initPower)
@@ -544,7 +544,7 @@ Image Symbol Table
     __libspace_start                         0x20200000   Data          96  libspace.o(.bss)
     __temporary_stack_top$libspace           0x20200060   Data           0  libspace.o(.bss)
     gRxData                                  0x20200060   Data           1  empty.o(.bss.gRxData)
-    gSPI_0Backup                             0x20200064   Data          40  ti_msp_dl_config.o(.bss.gSPI_0Backup)
+    gSPI_1Backup                             0x20200064   Data          40  ti_msp_dl_config.o(.bss.gSPI_1Backup)
     gTxData                                  0x2020008c   Data           1  empty.o(.bss.gTxData)
 
 
@@ -625,13 +625,13 @@ Memory Map of the image
     0x00000264   0x00000264   0x00000012   Code   RO           58    .text.DL_SPI_setClockConfig  driverlib.a(dl_spi.o)
     0x00000276   0x00000276   0x00000002   PAD
     0x00000278   0x00000278   0x00000020   Code   RO           26    .text.SYSCFG_DL_GPIO_init  ti_msp_dl_config.o
-    0x00000298   0x00000298   0x00000050   Code   RO           30    .text.SYSCFG_DL_SPI_0_init  ti_msp_dl_config.o
+    0x00000298   0x00000298   0x00000050   Code   RO           30    .text.SYSCFG_DL_SPI_1_init  ti_msp_dl_config.o
     0x000002e8   0x000002e8   0x00000040   Code   RO           28    .text.SYSCFG_DL_SYSCTL_init  ti_msp_dl_config.o
     0x00000328   0x00000328   0x00000020   Code   RO           22    .text.SYSCFG_DL_init  ti_msp_dl_config.o
     0x00000348   0x00000348   0x00000034   Code   RO           24    .text.SYSCFG_DL_initPower  ti_msp_dl_config.o
     0x0000037c   0x0000037c   0x00000038   Code   RO            2    .text.main          empty.o
-    0x000003b4   0x000003b4   0x00000002   Data   RO           37    .rodata.gSPI_0_clockConfig  ti_msp_dl_config.o
-    0x000003b6   0x000003b6   0x0000000a   Data   RO           38    .rodata.gSPI_0_config  ti_msp_dl_config.o
+    0x000003b4   0x000003b4   0x00000002   Data   RO           37    .rodata.gSPI_1_clockConfig  ti_msp_dl_config.o
+    0x000003b6   0x000003b6   0x0000000a   Data   RO           38    .rodata.gSPI_1_config  ti_msp_dl_config.o
     0x000003c0   0x000003c0   0x00000010   Data   RO          279    Region$$Table       anon$$obj.o
 
 
@@ -642,7 +642,7 @@ Memory Map of the image
     0x20200000        -       0x00000060   Zero   RW          143    .bss                c_p.l(libspace.o)
     0x20200060        -       0x00000001   Zero   RW            5    .bss.gRxData        empty.o
     0x20200061   0x000003d0   0x00000003   PAD
-    0x20200064        -       0x00000028   Zero   RW           36    .bss.gSPI_0Backup   ti_msp_dl_config.o
+    0x20200064        -       0x00000028   Zero   RW           36    .bss.gSPI_1Backup   ti_msp_dl_config.o
     0x2020008c        -       0x00000001   Zero   RW            4    .bss.gTxData        empty.o
     0x2020008d   0x000003d0   0x00000003   PAD
     0x20200090        -       0x00000000   Zero   RW           13    HEAP                startup_mspm0g350x_uvision.o

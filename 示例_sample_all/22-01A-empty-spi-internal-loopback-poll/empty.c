@@ -41,14 +41,11 @@ int main(void)
     gTxData = 1;
 
     while (1) {
-        /* Transmit data and wait to receive it */
-        DL_SPI_transmitData8(SPI_0_INST, gTxData);
-        gRxData = DL_SPI_receiveDataBlocking8(SPI_0_INST);
-        /* Toggle LED and USER_TEST pin */
-        //DL_GPIO_togglePins(GPIO_LEDS_PORT,
-        //    GPIO_LEDS_USER_LED_1_PIN | GPIO_LEDS_USER_TEST_PIN);
+ 
+        DL_SPI_transmitData8(SPI_1_INST, gTxData);
+        gRxData = DL_SPI_receiveDataBlocking8(SPI_1_INST);
 
-        /* Pause code execution to allow user to check value of gRxData */
+ 
         __BKPT(0);
         gTxData++;
     }

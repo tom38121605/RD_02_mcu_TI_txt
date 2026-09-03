@@ -44,6 +44,16 @@ char txBuf[100];
 volatile uint8_t gEchoData = 0;
 
 volatile uint8_t gRxData, gTxData;
+
+void delay_ms(uint32_t ms)
+{
+    while(ms--)
+    {
+        delay_cycles(CPUCLK_FREQ/1000);
+    }
+}
+
+
 int main(void)
 {
     SYSCFG_DL_init();
@@ -52,12 +62,14 @@ int main(void)
 
     while (1) 
     {
+    
+        delay_ms(1000);
 
         sprintf(txBuf, "data %d %d\r\n", gTxData, gRxData);
         SendString(txBuf);  
 
-        DL_SPI_transmitData8(SPI_0_INST, gTxData);
-        gRxData = DL_SPI_receiveDataBlocking8(SPI_0_INST);
+        DL_SPI_transmitData8(SPI_1_INST, gTxData);
+        gRxData = DL_SPI_receiveDataBlocking8(SPI_1_INST);
 
 
         //__BKPT(0);

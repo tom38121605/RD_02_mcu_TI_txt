@@ -40,7 +40,7 @@
 
 #include "ti_msp_dl_config.h"
 
-DL_SPI_backupConfig gSPI_0Backup;
+DL_SPI_backupConfig gSPI_1Backup;
 
 /*
  *  ======== SYSCFG_DL_init ========
@@ -53,10 +53,10 @@ SYSCONFIG_WEAK void SYSCFG_DL_init(void)
     /* Module-Specific Initializations*/
     SYSCFG_DL_SYSCTL_init();
     SYSCFG_DL_UART_0_init();
-    SYSCFG_DL_SPI_0_init();
+    SYSCFG_DL_SPI_1_init();
     /* Ensure backup structures have no valid state */
 
-	gSPI_0Backup.backupRdy 	= false;
+	gSPI_1Backup.backupRdy 	= false;
 
 }
 /*
@@ -67,7 +67,7 @@ SYSCONFIG_WEAK bool SYSCFG_DL_saveConfiguration(void)
 {
     bool retStatus = true;
 
-	retStatus &= DL_SPI_saveConfiguration(SPI_0_INST, &gSPI_0Backup);
+	retStatus &= DL_SPI_saveConfiguration(SPI_1_INST, &gSPI_1Backup);
 
     return retStatus;
 }
@@ -77,7 +77,7 @@ SYSCONFIG_WEAK bool SYSCFG_DL_restoreConfiguration(void)
 {
     bool retStatus = true;
 
-	retStatus &= DL_SPI_restoreConfiguration(SPI_0_INST, &gSPI_0Backup);
+	retStatus &= DL_SPI_restoreConfiguration(SPI_1_INST, &gSPI_1Backup);
 
     return retStatus;
 }
@@ -87,12 +87,12 @@ SYSCONFIG_WEAK void SYSCFG_DL_initPower(void)
     DL_GPIO_reset(GPIOA);
     DL_GPIO_reset(GPIOB);
     DL_UART_Main_reset(UART_0_INST);
-    DL_SPI_reset(SPI_0_INST);
+    DL_SPI_reset(SPI_1_INST);
 
     DL_GPIO_enablePower(GPIOA);
     DL_GPIO_enablePower(GPIOB);
     DL_UART_Main_enablePower(UART_0_INST);
-    DL_SPI_enablePower(SPI_0_INST);
+    DL_SPI_enablePower(SPI_1_INST);
     delay_cycles(POWER_STARTUP_DELAY);
 }
 
@@ -105,13 +105,13 @@ SYSCONFIG_WEAK void SYSCFG_DL_GPIO_init(void)
         GPIO_UART_0_IOMUX_RX, GPIO_UART_0_IOMUX_RX_FUNC);
 
     DL_GPIO_initPeripheralOutputFunction(
-        GPIO_SPI_0_IOMUX_SCLK, GPIO_SPI_0_IOMUX_SCLK_FUNC);
+        GPIO_SPI_1_IOMUX_SCLK, GPIO_SPI_1_IOMUX_SCLK_FUNC);
     DL_GPIO_initPeripheralOutputFunction(
-        GPIO_SPI_0_IOMUX_PICO, GPIO_SPI_0_IOMUX_PICO_FUNC);
+        GPIO_SPI_1_IOMUX_PICO, GPIO_SPI_1_IOMUX_PICO_FUNC);
     DL_GPIO_initPeripheralInputFunction(
-        GPIO_SPI_0_IOMUX_POCI, GPIO_SPI_0_IOMUX_POCI_FUNC);
+        GPIO_SPI_1_IOMUX_POCI, GPIO_SPI_1_IOMUX_POCI_FUNC);
     DL_GPIO_initPeripheralOutputFunction(
-        GPIO_SPI_0_IOMUX_CS0, GPIO_SPI_0_IOMUX_CS0_FUNC);
+        GPIO_SPI_1_IOMUX_CS0, GPIO_SPI_1_IOMUX_CS0_FUNC);
 
 }
 
@@ -153,11 +153,11 @@ SYSCONFIG_WEAK void SYSCFG_DL_UART_0_init(void)
     DL_UART_Main_init(UART_0_INST, (DL_UART_Main_Config *) &gUART_0Config);
     /*
      * Configure baud rate by setting oversampling and baud rate divisors.
-     *  Target baud rate: 115200
-     *  Actual baud rate: 115211.52
+     *  Target baud rate: 2000000
+     *  Actual baud rate: 2000000
      */
     DL_UART_Main_setOversampling(UART_0_INST, DL_UART_OVERSAMPLING_RATE_16X);
-    DL_UART_Main_setBaudRateDivisor(UART_0_INST, UART_0_IBRD_32_MHZ_115200_BAUD, UART_0_FBRD_32_MHZ_115200_BAUD);
+    DL_UART_Main_setBaudRateDivisor(UART_0_INST, UART_0_IBRD_32_MHZ_2000000_BAUD, UART_0_FBRD_32_MHZ_2000000_BAUD);
 
 
     /* Configure Interrupts */
@@ -168,7 +168,7 @@ SYSCONFIG_WEAK void SYSCFG_DL_UART_0_init(void)
     DL_UART_Main_enable(UART_0_INST);
 }
 
-static const DL_SPI_Config gSPI_0_config = {
+static const DL_SPI_Config gSPI_1_config = {
     .mode        = DL_SPI_MODE_CONTROLLER,
     .frameFormat = DL_SPI_FRAME_FORMAT_MOTO4_POL0_PHA0,
     .parity      = DL_SPI_PARITY_NONE,
@@ -177,15 +177,15 @@ static const DL_SPI_Config gSPI_0_config = {
     .chipSelectPin = DL_SPI_CHIP_SELECT_0,
 };
 
-static const DL_SPI_ClockConfig gSPI_0_clockConfig = {
+static const DL_SPI_ClockConfig gSPI_1_clockConfig = {
     .clockSel    = DL_SPI_CLOCK_BUSCLK,
     .divideRatio = DL_SPI_CLOCK_DIVIDE_RATIO_1
 };
 
-SYSCONFIG_WEAK void SYSCFG_DL_SPI_0_init(void) {
-    DL_SPI_setClockConfig(SPI_0_INST, (DL_SPI_ClockConfig *) &gSPI_0_clockConfig);
+SYSCONFIG_WEAK void SYSCFG_DL_SPI_1_init(void) {
+    DL_SPI_setClockConfig(SPI_1_INST, (DL_SPI_ClockConfig *) &gSPI_1_clockConfig);
 
-    DL_SPI_init(SPI_0_INST, (DL_SPI_Config *) &gSPI_0_config);
+    DL_SPI_init(SPI_1_INST, (DL_SPI_Config *) &gSPI_1_config);
 
     /* Configure Controller mode */
     /*
@@ -193,11 +193,11 @@ SYSCONFIG_WEAK void SYSCFG_DL_SPI_0_init(void) {
      *     outputBitRate = (spiInputClock) / ((1 + SCR) * 2)
      *     500000 = (32000000)/((1 + 31) * 2)
      */
-    DL_SPI_setBitRateSerialClockDivider(SPI_0_INST, 31);
+    DL_SPI_setBitRateSerialClockDivider(SPI_1_INST, 31);
     /* Set RX and TX FIFO threshold levels */
-    DL_SPI_setFIFOThreshold(SPI_0_INST, DL_SPI_RX_FIFO_LEVEL_1_2_FULL, DL_SPI_TX_FIFO_LEVEL_1_2_EMPTY);
+    DL_SPI_setFIFOThreshold(SPI_1_INST, DL_SPI_RX_FIFO_LEVEL_1_2_FULL, DL_SPI_TX_FIFO_LEVEL_1_2_EMPTY);
 
     /* Enable module */
-    DL_SPI_enable(SPI_0_INST);
+    DL_SPI_enable(SPI_1_INST);
 }
 
