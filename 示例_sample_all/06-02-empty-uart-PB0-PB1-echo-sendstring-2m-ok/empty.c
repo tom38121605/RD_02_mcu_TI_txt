@@ -39,9 +39,17 @@
 void SendString(char *str);
 char txBuf[100];
 
-
-
 volatile uint8_t gEchoData = 0;
+
+void delay_ms(uint32_t ms)
+{
+    while(ms--)
+    {
+        delay_cycles(CPUCLK_FREQ/1000);
+    }
+}
+
+
 int main(void)
 {
     SYSCFG_DL_init();
@@ -53,10 +61,12 @@ int main(void)
     
     while (1) 
     {
-        delay_cycles(32000000);
+        //delay_cycles(32000000);        delay_ms(1000);
         
         sprintf(txBuf, "tst %d\r\n", 100);
-        SendString(txBuf);       
+        SendString(txBuf);   
+        
+        //DL_UART_Main_transmitDataBlocking(UART_0_INST, 0x55);
 
     }
 }
