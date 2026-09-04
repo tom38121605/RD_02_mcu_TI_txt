@@ -117,6 +117,21 @@ void SPI_0_INST_IRQHandler(void)
         void SPI_1_INST_IRQHandler(void)      // ok
 
 
+9.  ppi配置触发自动拉高/拉低引脚的重点说明
+
+         下面第二句配置 ppi 拉低 x 引脚前，必须先写了第一句，给它先分配一个 gpiote 的继电器
+
+         //① 分配GPIOTE硬件通道（继电器），绑定引脚OMMO_IO_X_EN，配置通道任务为CLEAR
+         adc_sensors_intermittent_gpiote_pin_clear(OMMO_IO_X_EN);
+
+         //② 将PPI通道，绑定到该引脚的CLR任务寄存器地址
+         nrf_ppi_fork_endpoint_setup(channel_bridge_select_ppi, nrfx_gpiote_clr_task_addr_get(OMMO_IO_X_EN));
+
+         //把之前给 X_EN 分配的那一路 GPIOTE 继电器彻底断电、解绑、释放资源。//调用这行，**不会自动把 X_EN 拉高或者拉低**
+         adc_sensors_intermittent_gpiote_pin_disable_gpiote(OMMO_IO_X_EN);     //因为继电器只有8个，关闭继电器可以释放出来
+
+
+
 
 
 
