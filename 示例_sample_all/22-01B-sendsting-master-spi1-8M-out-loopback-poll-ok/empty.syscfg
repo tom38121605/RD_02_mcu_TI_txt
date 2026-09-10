@@ -18,7 +18,6 @@ const UART1  = UART.addInstance();
 /**
  * Write custom configuration values to the imported modules.
  */
-SPI1.targetBitRate                      = 500000;
 SPI1.$name                              = "SPI_1";
 SPI1.peripheral.$assign                 = "SPI1";
 SPI1.peripheral.sclkPin.$assign         = "PA17";

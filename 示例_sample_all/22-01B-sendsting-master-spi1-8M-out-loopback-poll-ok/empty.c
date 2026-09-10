@@ -58,12 +58,16 @@ int main(void)
 {
     SYSCFG_DL_init();
 
-    gTxData = 1;
+    gTxData = 0xAA;
+    
+    delay_ms(2000);
 
+    //SendString("start master"); 
+    
     while (1) 
     {
     
-        delay_ms(1000);
+        delay_ms(100);
 
         sprintf(txBuf, "data %d %d\r\n", gTxData, gRxData);
         SendString(txBuf);  
