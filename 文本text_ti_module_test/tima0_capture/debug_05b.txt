@@ -1,0 +1,67 @@
+
+***1------------------------------
+
+
+-----------------------------end1
+
+
+
+typedef enum  
+
+    DL_TIMER_CC_0_INDEX = 0,
+ 
+    DL_TIMER_CC_1_INDEX = 1,
+ 
+    DL_TIMER_CC_2_INDEX = 2,
+ 
+    DL_TIMER_CC_3_INDEX = 3,
+
+
+
+
+#define GPIO_PWM_0_C0_PORT                                                 GPIOB
+#define GPIO_PWM_0_C0_PIN                                         DL_GPIO_PIN_15
+
+#define GPIO_PWM_0_C0_IOMUX                                      (IOMUX_PINCM32)   //31
+#define GPIO_PWM_0_C0_IOMUX_FUNC                     IOMUX_PINCM32_PF_TIMG7_CCP0   //6
+
+#define GPIO_PWM_0_C0_IDX                                    DL_TIMER_CC_0_INDEX
+
+
+
+#define IOMUX_PINCM32_PF_TIMG7_CCP0                   ((uint32_t)0X00000006)
+
+
+
+
+---
+
+static const DL_TimerG_PWMConfig gPWM_0Config = 
+
+    .pwmMode = DL_TIMER_PWM_MODE_EDGE_ALIGN,    //00<<4
+
+    .period = 1000,
+
+    .isTimerWithFourCC = false,
+
+    .startTimer = DL_TIMER_STOP,          // 0<<0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     

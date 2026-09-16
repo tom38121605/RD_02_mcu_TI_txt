@@ -1,0 +1,74 @@
+
+***1------------------------------
+
+
+-----------------------------end1
+
+
+
+
+#define GPIO_COMPARE_0_C0_PORT                                             GPIOB
+#define GPIO_COMPARE_0_C0_PIN                                      DL_GPIO_PIN_8
+
+#define GPIO_COMPARE_0_C0_IOMUX                                  (IOMUX_PINCM25)    //24
+#define GPIO_COMPARE_0_C0_IOMUX_FUNC                 IOMUX_PINCM25_PF_TIMA0_CCP0    //0X00000004
+
+
+
+--------
+
+static const DL_TimerA_ClockConfig gCOMPARE_0ClockConfig =  
+
+    .clockSel    = DL_TIMER_CLOCK_BUSCLK,         //1<<3
+
+    .divideRatio = DL_TIMER_CLOCK_DIVIDE_1,       //000<<0
+
+    .prescale = 0U
+ 
+
+
+
+
+
+--------
+
+
+static const DL_TimerA_CompareConfig gCOMPARE_0CompareConfig =  
+
+    .compareMode    = DL_TIMER_COMPARE_MODE_EDGE_COUNT,               // 0
+
+    .count          = 2,
+
+    .startTimer     = DL_TIMER_STOP,                                    // 0<<0
+
+    .edgeDetectMode = DL_TIMER_COMPARE_EDGE_DETECTION_MODE_RISING,      // 001<<4
+
+    .inputChan      = DL_TIMER_INPUT_CHAN_0,                            // 0
+
+    .inputInvMode   = DL_TIMER_CC_INPUT_INV_NOINVERT,                  // 0<<7
+ 
+
+
+typedef enum  
+
+    DL_TIMER_INPUT_CHAN_0,    //0
+
+
+typedef enum  
+ 
+    DL_TIMER_COMPARE_MODE_EDGE_COUNT,      //0
+ 
+    DL_TIMER_COMPARE_MODE_EDGE_COUNT_UP,   //1
+
+
+
+
+
+
+
+
+
+
+
+
+

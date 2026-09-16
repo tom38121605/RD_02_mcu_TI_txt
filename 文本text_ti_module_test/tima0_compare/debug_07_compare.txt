@@ -1,0 +1,171 @@
+
+
+===================================== capture 初始化 =================================================
+
+ main
+
+
+   //外设初始化
+   SYSCFG_DL_init().
+
+
+    //使能tima0的中断
+    NVIC_EnableIRQ(COMPARE_0_INST_INT_IRQN);
+
+    //开启定时器tima0
+    //DL_TimerG_startCounter(COMPARE_0_INST);
+        gptimer->COUNTERREGS.CTRCTL |= 1<<0;
+
+
+-----------
+
+SYSCFG_DL_init( )
+
+
+    //SYSCFG_DL_initPower();
+        。。。
+
+       //解锁服务TIMA0
+       //  DL_TimerA_reset(COMPARE_0_INST);
+           gptimer->GPRCM.RSTCTL =  (GPTIMER_RSTCTL_KEY_UNLOCK_W | GPTIMER_RSTCTL_RESETSTKYCLR_CLR |  GPTIMER_RSTCTL_RESETASSERT_ASSERT);  //1b<<24 | 1<<1 | 1<<0
+
+
+
+    //设置PB8为捕获引脚： 复用PB8为TIMA0_C0，打开引脚对外设的透传，打开输入使能  
+    //SYSCFG_DL_GPIO_init();
+    //    DL_GPIO_initPeripheralInputFunction(GPIO_COMPARE_0_C0_IOMUX,GPIO_COMPARE_0_C0_IOMUX_FUNC);      //24， bit.4-0 = 4
+    //       IOMUX->SECCFG.PINCM[24] =  function | IOMUX_PINCM_PC_CONNECTED | IOMUX_PINCM_INENA_ENABLE;        //1<<7 | 1<<18
+             IOMUX->SECCFG.PINCM[24] =  4<<0 | 1<<7 | 1<<18 ;       //复用TIMA0_C0，打开引脚对外设的透传，打开输入使能   
+
+
+
+    //tima0的时钟设置 
+    //tima0的比较设置 
+    SYSCFG_DL_COMPARE_0_init();
+
+
+---------------
+
+
+SYSCFG_DL_COMPARE_0_init( )  
+
+
+    //tima0的时钟设置   （先忽略跳过）
+    //DL_TimerA_setClockConfig(COMPARE_0_INST, gCOMPARE_0ClockConfig);
+    //  DL_Timer_setClockConfig(COMPARE_0_INST, gCOMPARE_0ClockConfig);  
+
+        gptimer->CLKSEL = (uint32_t)(config->clockSel);      //1<<3
+        gptimer->CLKDIV = (uint32_t)(config->divideRatio);   //000<<0
+        gptimer->COMMONREGS.CPS = (config->prescale);        //0
+
+
+    //compare设置
+    //DL_TimerA_initCompareMode(COMPARE_0_INST, gCOMPARE_0CompareConfig);
+       DL_Timer_initCompareMode(COMPARE_0_INST, gCOMPARE_0CompareConfig);
+
+
+    //使能tima0的中断：向下触发门槛中断，使能load中断
+    //DL_TimerA_enableInterrupt(COMPARE_0_INST , DL_TIMERA_INTERRUPT_CC0_DN_EVENT | DL_TIMERA_INTERRUPT_LOAD_EVENT| DL_TIMERA_INTERRUPT_ZERO_EVENT);
+        gptimer->CPU_INT.IMASK |= 1<<4 | 1<<1| 1<<0;     
+
+
+    //使能tima0的时钟
+    //DL_TimerA_enableClock(COMPARE_0_INST);
+    //  DL_Timer_enableClock(COMPARE_0_INST);
+        gptimer->COMMONREGS.CCLKCTL = GPTIMER_CCLKCTL_CLKEN_ENABLED;   // 1<<0 ,使能tima0的时钟
+
+
+
+
+------------
+
+//设置IFCTL_01[0]，不反相，捕获通道为CCP0 (水管通向外部引脚)
+
+//设置LOAD ，tima0的load值为2
+
+//设置CCCTL_01[0] ，为compare， 捕获时不清0计数器， 计数节奏每个CCP的上升沿走一步，不用捕获边沿去重装计数器，关闭捕获
+
+//设置CTRCTL, 重载计数器听通道0的LCOND(不用捕获重装计数器)，计数节奏听通道0的ACOND(每TIMCLK)，计时器清0听通道0的ZCOND(不清0)，向下计数
+    使能后从load开始计数，向下计数， 计数器数到0后自动重载并继续计数，停止计数器
+
+
+
+
+参数：TIMA0,      gCOMPARE_0CompareConfig
+
+DL_Timer_initCompareMode(  gptimer,   config  )
+
+
+    //DL_Timer_getInChanConfig( config->inputChan,  &inChanConfig );   //DL_TIMER_INPUT_CHAN_0
+
+        case DL_TIMER_INPUT_CHAN_0:
+
+            inChanConfig->index    = DL_TIMER_CC_0_INDEX;                // 0 ， CC0
+
+            inChanConfig->ccpInput =  DL_TIMER_CC_IN_SEL_CCP0 ;          //0010<<0 
+
+            inChanConfig->timerConfig =  ( GPTIMER_CTRCTL_CLC_CCCTL0_LCOND |      // 000<<7
+                                     GPTIMER_CTRCTL_CAC_CCCTL0_ACOND |      // 000<<10 
+                                     GPTIMER_CTRCTL_CZC_CCCTL0_ZCOND |      // 000<<13
+                                     GPTIMER_CTRCTL_CM_DOWN);               // 00<<4
+
+            inChanConfig->ccpInputDir = DL_TIMER_CC0_INPUT;                 // 0<<0
+
+
+
+    //设置IFCTL_01[0]，不反相，捕获通道为CCP0 (水管通向外部引脚)
+    //DL_Timer_setCaptureCompareInput( gptimer,  config->inputInvMode,  inChanConfig.ccpInput, inChanConfig.index );
+        TIMA0->COUNTERREGS.IFCTL_01[0]  $= 0<<7 | 0010<<0                     //bit.7=0,  bit.3-0 =2
+
+
+    //设置tima0的load值为2
+    //DL_Timer_setLoadValue(gptimer, config->count);
+       gptimer->COUNTERREGS.LOAD = 2;
+
+
+     //设置CCCTL_01[0] ，为compare， 捕获时不清0计数器， 计数节奏每个CCP的上升沿走一步，不用捕获边沿去重装计数器，关闭捕获
+    //DL_Timer_setCaptureCompareCtl( gptimer, DL_TIMER_CC_MODE_COMPARE,                                                                         // 0<<17
+                                   DL_TIMER_CC_ZCOND_NONE | config->edgeDetectMode | DL_TIMER_CC_LCOND_NONE | DL_TIMER_CC_CCOND_NOCAPTURE ,   // 000<<12 | 001<<4 | 000<<8 | 000<<0
+                                   inChanConfig.index );                                                                                      // DL_TIMER_CC_0_INDEX   //0
+
+         gptimer->COUNTERREGS.CCCTL_01[0]  $=  0<<17 |  000<<12 | 001<<4 | 000<<8 | 000<<0;  //设置为compare， 捕获时不清0计数器， 计数节奏每个CCP的上升沿走一步，不用捕获边沿去重装计数器，关闭捕获
+
+
+
+    //设置CTRCTL, 重载计数器听通道0的LCOND(不用捕获重装计数器)，计数节奏听通道0的ACOND(每TIMCLK)，计时器清0听通道0的ZCOND(不清0)，向下计数
+       使能后从load开始计数，向下计数， 计数器数到0后自动重载并继续计数，停止计数器
+    switch (config->compareMode)  //DL_TIMER_COMPARE_MODE_EDGE_COUNT
+    
+        case DL_TIMER_COMPARE_MODE_EDGE_COUNT:
+
+            DL_Common_updateReg(&gptimer->COUNTERREGS.CTRCTL,
+                   inChanConfig.timerConfig |
+                    GPTIMER_CTRCTL_CVAE_LDVAL | GPTIMER_CTRCTL_CM_DOWN | GPTIMER_CTRCTL_REPEAT_REPEAT_1 |    //00<<28 | 00<<4 | 001 <<1
+                    config->startTimer ,                                                                     //0<<0
+
+
+                (GPTIMER_CTRCTL_CZC_MASK | GPTIMER_CTRCTL_CAC_MASK |
+                    GPTIMER_CTRCTL_CLC_MASK | GPTIMER_CTRCTL_CVAE_MASK |
+                    GPTIMER_CTRCTL_CM_MASK | GPTIMER_CTRCTL_REPEAT_MASK |
+                    GPTIMER_CTRCTL_EN_MASK));
+           
+    
+         gptimer->COUNTERREGS.CTRCTL $= 000<<7 |000<<10 |000<<13 | 00<<4  //设置CTRCTL, 重载计数器听通道0的LCOND(不捕获重装计数器)，计数节奏听通道0的ACOND(每TIMCLK)，计时器清0听通道0的ZCOND(不清0)，向下计数
+                                        | 00<<28 | 00<<4 | 001 <<1 | 0<<0       使能后从load开始计数，向下计数， 计数器数到0后自动重载并继续计数，停止计数器   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
