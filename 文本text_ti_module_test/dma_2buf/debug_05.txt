@@ -4,9 +4,29 @@
 
 
 
+ main
 
 
-========================dma=============================
+   //外设初始化
+   SYSCFG_DL_init().
+
+   //使能dma的irq总中断
+   NVIC_EnableIRQ(DMA_INT_IRQn);
+
+
+   DL_DMA_setSrcAddr(DMA, DMA_CH0_CHAN_ID, (uint32_t) &gSrcData[0]);
+   DL_DMA_setDestAddr(DMA, DMA_CH0_CHAN_ID, (uint32_t) &gDstData[0]);
+      
+   DL_DMA_setTransferSize( DMA, DMA_CH0_CHAN_ID, sizeof(gSrcData) / sizeof(uint32_t) );
+   DL_DMA_enableChannel(DMA, DMA_CH0_CHAN_ID);
+
+   DL_DMA_startTransfer(DMA, DMA_CH0_CHAN_ID);
+
+
+
+
+
+========================参考=============================
 
 
  main
