@@ -33,9 +33,14 @@ SYSCFG_DL_init( )
     //SYSCFG_DL_initPower();
         。。。
 
-       //解锁服务TIMA0
+       //设置RSTCTL，解锁寄存器， 清reset标志，  reset定时器
        //  DL_TimerA_reset(CAPTURE_0_INST);
            gptimer->GPRCM.RSTCTL = (GPTIMER_RSTCTL_KEY_UNLOCK_W | GPTIMER_RSTCTL_RESETSTKYCLR_CLR | GPTIMER_RSTCTL_RESETASSERT_ASSERT);  //1b<<24 | 1<<1 | 1<<0
+
+       //设置PWREN，解锁寄存器， 使能定时器power
+       //DL_TimerA_enablePower(CAPTURE_0_INST);
+          gptimer->GPRCM.PWREN =  GPTIMER_PWREN_KEY_UNLOCK_W | GPTIMER_PWREN_ENABLE_ENABLE;      //26H<<24 | 1<<0
+
 
 
 
