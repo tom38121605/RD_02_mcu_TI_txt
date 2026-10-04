@@ -72,7 +72,6 @@ SYSCFG_DL_CAPTURE_0_init( )
         gptimer->COMMONREGS.CPS = (config->prescale);        //3
 
 
-
     //tima0的捕获设置 
     //设置IFCTL_01[0]，不反相，捕获通道为CCP0 (水管通向外部引脚)
     //设置LOAD ， tima0的load值为65499
@@ -85,14 +84,13 @@ SYSCFG_DL_CAPTURE_0_init( )
     DL_TimerA_initCaptureMode(CAPTURE_0_INST,    gCAPTURE_0CaptureConfig );
 
 
-   //使能tima0的中断：向下触发门槛中断，zero中断
+   //设置IMASK，使能tima0的中断：向下触发门槛中断，zero中断
     //DL_TimerA_enableInterrupt(CAPTURE_0_INST , DL_TIMERA_INTERRUPT_CC0_DN_EVENT |  DL_TIMERA_INTERRUPT_ZERO_EVENT);     // 1<<4 | 1<<0 
         gptimer->CPU_INT.IMASK |= interruptMask;     //1<<4 | 1<<0   
 
-    //使能tima0的时钟
+    //设置CCLKCTL，使能tima0的时钟
     //DL_TimerA_enableClock(CAPTURE_0_INST);
-    //     gptimer->COMMONREGS.CCLKCTL = (GPTIMER_CCLKCTL_CLKEN_ENABLED);
-            CCLKCTL = 1<<0 ;      // CCLKCTL.0=1            //使能tima0的时钟
+        gptimer->COMMONREGS.CCLKCTL = GPTIMER_CCLKCTL_CLKEN_ENABLED;   // 1<<0   
  
 
 -------
