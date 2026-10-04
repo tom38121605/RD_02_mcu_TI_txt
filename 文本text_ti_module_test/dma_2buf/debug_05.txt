@@ -38,6 +38,7 @@
       dma->DMACHAN[0].DMACTL |=1<<0;     
 
 
+---------
 
 SYSCFG_DL_init( )
 
@@ -81,7 +82,7 @@ DL_DMA_initChannel(  dma,  channelNum,  config)
 
     //设置 DMATCTL, 软件触发， 外部触发
     //DL_DMA_setTrigger(dma, channelNum, config->trigger, config->triggerType);
-       dma->DMATRIG[channelNum].DMATCTL $= 000000<<0 | 0<<7;  
+       dma->DMATRIG[0].DMATCTL $= 000000<<0 | 0<<7;  
  
 
 
