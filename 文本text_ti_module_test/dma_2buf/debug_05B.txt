@@ -6,7 +6,27 @@
 
 
 
+#define DMA_CH0_CHAN_ID            (0)
 
+
+
+
+static const DL_DMA_Config gDMA_CH0Config =  
+
+    .transferMode   = DL_DMA_SINGLE_BLOCK_TRANSFER_MODE,      //1<<28,  传输模式是block，只传一次  
+
+    .extendedMode   = DL_DMA_NORMAL_MODE,      //0<<24,      普通模式，从源地址读数据，写到目的地址
+
+    .destIncrement  = DL_DMA_ADDR_INCREMENT,    //0011<<16(20)    , 目标地址步长+1
+    .srcIncrement   = DL_DMA_ADDR_INCREMENT,     //0011<<16         , 源地址步长+1
+
+    .destWidth      = DL_DMA_WIDTH_WORD,          //010<<8(12)    ，目标数据长度是4个字节
+    .srcWidth       = DL_DMA_WIDTH_WORD,           //010<<8         ， 源数据长度是4个字节
+
+    .trigger        = DMA_CH0_TRIGGER_SEL_SW,              //000000<<0， 软件触发
+
+    .triggerType    = DL_DMA_TRIGGER_TYPE_EXTERNAL,   //0<<7， 外部触发 （软件触发也是外部触发，dma模块之外的触发）
+ 
 
 
 
