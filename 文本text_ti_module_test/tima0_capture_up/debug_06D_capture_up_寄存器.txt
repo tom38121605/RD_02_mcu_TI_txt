@@ -1,0 +1,138 @@
+
+
+
+===================================== capture  up 初始化 =================================================
+
+
+ main
+
+    //设置PB8为TIMA0的捕捉引脚
+    //DL_GPIO_initPeripheralInputFunction(GPIO_CAPTURE_0_C0_IOMUX,GPIO_CAPTURE_0_C0_IOMUX_FUNC);
+       IOMUX->SECCFG.PINCM[24] =  4<<0 | 1<<7 | 1<<18 ;  //PB8 as capture
+
+    //设置tima0的时钟源，时钟分频
+    //DL_TimerA_setClockConfig(CAPTURE_0_INST,  (DL_TimerA_ClockConfig *) &gCAPTURE_0ClockConfig);
+       TIMA0->CLKSEL = 1<<3;
+       TIMA0->CLKDIV = 001<<0;
+       TIMA0->COMMONREGS.CPS = 3;
+
+
+    //设置bit7=0不反相， bit3-0=2输入源为外部引脚
+    //DL_TimerA_initCaptureMode(CAPTURE_0_INST,  (DL_TimerA_CaptureConfig *) &gCAPTURE_0CaptureConfig);
+      TIMA0->COUNTERREGS.IFCTL_01[0] &= ~(1<<7 | 15<<0); 
+      TIMA0->COUNTERREGS.IFCTL_01[0] |= 0<<7 | 0b0010<<0; 
+
+    //设置load为 65499
+      TIMA0->COUNTERREGS.LOAD =  65499;      //down, up
+
+      //设置为capture，ZCOND捕获时不清0计数器，ACOND计数节奏每个 TIMCLK 走一步，LCOND不用捕获边沿去重装计数器，上升沿捕获
+      TIMA0->COUNTERREGS.CCCTL_01[0]  &=  ~(1<<17 | 7<<12 | 7<<4 | 7<<8 | 1<<0);
+      TIMA0->COUNTERREGS.CCCTL_01[0]  |=  1<<17 | 000<<12 | 000<<4 | 000<<8 | 1<<0;
+
+
+      //设置CCPD，CCP0设置为输入 
+      TIMA0->COMMONREGS.CCPD &=~(1<<0);  
+      TIMA0->COMMONREGS.CCPD |=0<<0;  
+
+
+    //设置 CTRCTL, 重载计数器听通道0的LCOND（不用捕获重装计数器），计数节奏听通道 0 的ACOND（每个TIMCLK），计时器清0听通道0的ZCOND(不清0)，向上计数，
+     使能后从0开始计数， 计数器数到0后自动重载并继续计数，停止计数器  
+      TIMA0->COUNTERREGS.CTRCTL |= 000<<7 |000<<10 |000<<13 | 0b10<<4 | 0b10<<28 | 001 <<1 | 0<<0;   //up
+  
+
+
+    //使能tima0中断： cc0向上捕捉中断，cc0向下捕捉中断， load中断， zero中断
+    //DL_TimerA_enableInterrupt(COMPARE_0_INST , CC0_UP_EVENT | DL_TIMERA_INTERRUPT_CC0_DN_EVENT |LOAD_EVENT| ZERO_EVENT);
+    //   TIMA0->CPU_INT.IMASK = 1<<8 | 1<<4 | 1<<1| 1<<0;    //用 "=" 代替 "|=" ，更清晰是哪些中断
+       TIMA0->CPU_INT.IMASK = 1<<8 | 1<<0;                           //用 "=" 代替 "|=" ，更清晰是哪些中断
+
+
+    //使能tima0的时钟
+    //DL_TimerA_enableClock(CAPTURE_0_INST);
+       TIMA0->COMMONREGS.CCLKCTL = 1<<0;
+    
+    //使能tima0的总irq中断
+    NVIC_EnableIRQ(CAPTURE_0_INST_INT_IRQN);
+    
+    //开启tima0计数
+    //DL_TimerG_startCounter(CAPTURE_0_INST);
+       TIMA0->COUNTERREGS.CTRCTL |= 1<<0;
+
+
+
+
+
+===================================== capture up 中断响应 =================================================
+
+
+ //main
+
+
+    //取得tima0的load值
+    //iload = DL_TimerG_getLoadValue(CAPTURE_0_INST);
+       iload =TIMA0->COUNTERREGS.LOAD;
+
+
+    while(1)
+
+        
+        if( flg_capture_up == 1)         
+
+           flg_capture_up = 0;
+
+           iperiod = iload - ival_cc0;
+           
+           sprintf(txBuf, "Period %d\r\n", iperiod);
+           SendString(txBuf);  
+           
+          
+-------
+
+
+CAPTURE_0_INST_IRQHandler()
+
+    iret = DL_TimerG_getPendingInterrupt(CAPTURE_0_INST);
+
+    switch (iret )
+    
+        case DL_TIMERG_IIDX_CC0_DN:
+        
+            if (isynch == 1)   //第3个是pwm的下降沿，            
+   
+                //取得cc0的拍照值
+                //ival_cc0 = DL_TimerG_getCaptureCompareValue(CAPTURE_0_INST, DL_TIMER_CC_0_INDEX);
+                  ival_cc0 = TIMA0->COUNTERREGS.CC_01[0];   
+
+                flg_capture_up = 1;            
+            
+            else     //第1个是pwm的下降沿做同步信号     （第2个是pwm的上升沿，不会触发中断，但会拍照计数值到CC0 -- 待验证）                 
+                isynch = 1;            
+            
+
+            //DL_TimerG_setTimerCount(CAPTURE_0_INST, 0);   // 收到同步信号后（或者完成一个pwm周期后），重置计数值 
+              TIMA0->COUNTERREGS.CTR = 0;        //up   
+
+            break;
+            
+            
+        case DL_TIMERG_IIDX_ZERO:
+
+            isynch = 0;    //没有检测到pwm信号
+            break;
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
