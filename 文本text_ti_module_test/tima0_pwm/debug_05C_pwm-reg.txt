@@ -134,7 +134,7 @@
 //设置CCCTL_01，CC0, CC1为 compare 模式， 关闭捕获
 //设置OCTL_01，CC0, CC1初始电平为低， 输出不反相，普通 PWM 输出  
 //设置IFCTL_01，CC0,CC1输入不反相，输入源为对应 CC 通道的 CCP 引脚
-//设置CTRCTL,  向下计数， 计数器数到0后自动重载并继续计数，停止计数器   
+//设置CTRCTL,  向下计数，  计数器数到0后继续计数，停止计数器   
 DL_Timer_initFourCCPWMMode( gptimer,  config )
 
     if (true == config->isTimerWithFourCC)   //no  （下面的CC3,CC4不需要配置）
@@ -145,11 +145,7 @@ DL_Timer_initFourCCPWMMode( gptimer,  config )
     pwmConfig.pwmMode    = config->pwmMode;        // DL_TIMER_PWM_MODE_EDGE_ALIGN,    //00<<4
     pwmConfig.startTimer = config->startTimer;     // DL_TIMER_STOP,          // 0<<0
 
-    //设置timg7的load值为999
-    //设置CCACT_01，CC0, CC1装载时拉高, 向下计数匹配 CC门槛 值时拉低
-    //设置CCCTL_01，CC0, CC1为 compare 模式， 关闭捕获
-    //设置OCTL_01，CC0, CC1初始电平为低， 输出不反相，普通 PWM 输出  
-    //设置IFCTL_01，CC0,CC1输入不反相，输入源为对应 CC 通道的 CCP 引脚停止计数器   
+
     DL_Timer_initTwoCCPWMMode(gptimer, &pwmConfig);
  
 
@@ -161,7 +157,7 @@ DL_Timer_initFourCCPWMMode( gptimer,  config )
 //设置CCCTL_01，CC0, CC1为 compare 模式， 关闭捕获
 //设置OCTL_01，CC0, CC1初始电平为低， 输出不反相，普通 PWM 输出  
 //设置IFCTL_01，CC0,CC1输入不反相，输入源为对应 CC 通道的 CCP 引脚
-//设置CTRCTL,  向下计数， 计数器数到0时后自动重载并继续计数，停止计数器   
+//设置CTRCTL,  向下计数， 计数器数到0后继续计数，停止计数器   
 
 参数：TIMG7,  pwmConfig
 
@@ -175,10 +171,10 @@ DL_Timer_initTwoCCPWMMode(  *gptimer,  *config)
             //DL_Timer_setLoadValue(gptimer, (config->period - 1));  //1000
                gptimer->COUNTERREGS.LOAD = 999;
 
-            //DL_Timer_setCaptureCompareAction(gptimer, (DL_TIMER_CC_LACT_CCP_HIGH | DL_TIMER_CC_CDACT_CCP_LOW), DL_TIMER_CC_0_INDEX);  //01<<3 | 0b10<<6  , 0
+            //DL_Timer_setCaptureCompareAction(gptimer, (DL_TIMER_CC_LACT_CCP_HIGH | DL_TIMER_CC_CDACT_CCP_LOW), DL_TIMER_CC_0_INDEX);   
                 gptimer->COUNTERREGS.CCACT_01[0] $= 01<<3 | 10<<6;    //设置CCACT_01，CC0装载时拉高, 向下计数时匹配 CC门槛值时拉低
 
-            DL_Timer_setCaptureCompareAction(gptimer, (DL_TIMER_CC_LACT_CCP_HIGH | DL_TIMER_CC_CDACT_CCP_LOW), DL_TIMER_CC_1_INDEX);  //01<<3 | 0b10<<6  , 1
+            DL_Timer_setCaptureCompareAction(gptimer, (DL_TIMER_CC_LACT_CCP_HIGH | DL_TIMER_CC_CDACT_CCP_LOW), DL_TIMER_CC_1_INDEX);   
                 gptimer->COUNTERREGS.CCACT_01[1] $= 01<<3 | 10<<6;    //设置CCACT_01，CC1装载时拉高, 向下计数时匹配 CC门槛值时拉低
 
 
@@ -191,19 +187,19 @@ DL_Timer_initTwoCCPWMMode(  *gptimer,  *config)
 
 
 
-    //DL_Timer_setCaptureCompareOutCtl(gptimer, DL_TIMER_CC_OCTL_INIT_VAL_LOW, DL_TIMER_CC_OCTL_INV_OUT_DISABLED, DL_TIMER_CC_OCTL_SRC_FUNCVAL, DL_TIMER_CC_0_INDEX); //0<<5 , 0<<4, 0000<<0, 0
-         gptimer->COUNTERREGS.OCTL_01[0] = 0<<5 , 0<<4, 0000<<0 ;   // 设置OCTL_01，CC0初始电平为低， 输出不反相，普通 PWM 输出  
+    //DL_Timer_setCaptureCompareOutCtl(gptimer, DL_TIMER_CC_OCTL_INIT_VAL_LOW, DL_TIMER_CC_OCTL_INV_OUT_DISABLED, DL_TIMER_CC_OCTL_SRC_FUNCVAL, DL_TIMER_CC_0_INDEX);  
+         gptimer->COUNTERREGS.OCTL_01[0] = 0<<5 | 0<<4 | 0000<<0 ;   // 设置OCTL_01，CC0初始电平为低， 输出不反相，普通 PWM 输出  
 
-    //DL_Timer_setCaptureCompareOutCtl(gptimer, DL_TIMER_CC_OCTL_INIT_VAL_LOW, DL_TIMER_CC_OCTL_INV_OUT_DISABLED, DL_TIMER_CC_OCTL_SRC_FUNCVAL, DL_TIMER_CC_1_INDEX); //0<<5 , 0<<4, 0000<<0, 1
-         gptimer->COUNTERREGS.OCTL_01[1] = 0<<5 , 0<<4, 0000<<0 ;   // 设置OCTL_01，CC1初始电平为低， 输出不反相，普通 PWM 输出  
+    //DL_Timer_setCaptureCompareOutCtl(gptimer, DL_TIMER_CC_OCTL_INIT_VAL_LOW, DL_TIMER_CC_OCTL_INV_OUT_DISABLED, DL_TIMER_CC_OCTL_SRC_FUNCVAL, DL_TIMER_CC_1_INDEX);  
+         gptimer->COUNTERREGS.OCTL_01[1] = 0<<5 | 0<<4 | 0000<<0 ;   // 设置OCTL_01，CC1初始电平为低， 输出不反相，普通 PWM 输出  
 
 
 
     //DL_Timer_setCaptureCompareInput(gptimer, DL_TIMER_CC_INPUT_INV_NOINVERT, DL_TIMER_CC_IN_SEL_CCPX, DL_TIMER_CC_0_INDEX);    //0<<7, 0000<0, 0
-         gptimer->COUNTERREGS.IFCTL_01[0] $= 0<<7 | 0000<0;   //设置IFCTL_01，CC0输入不反相，输入源为对应 CC 通道的 CCP 引脚
+         gptimer->COUNTERREGS.IFCTL_01[0] $= 0<<7 | 0000<<0;   //设置IFCTL_01，CC0输入不反相，输入源为对应 CC 通道的 CCP 引脚
 
     //DL_Timer_setCaptureCompareInput(gptimer, DL_TIMER_CC_INPUT_INV_NOINVERT,  DL_TIMER_CC_IN_SEL_CCPX, DL_TIMER_CC_1_INDEX);    //0<<7, 0000<0, 1
-         gptimer->COUNTERREGS.IFCTL_01[1] $= 0<<7 | 0000<0;   //设置IFCTL_01，CC1输入不反相，输入源为对应 CC 通道的 CCP 引脚
+         gptimer->COUNTERREGS.IFCTL_01[1] $= 0<<7 | 0000<<0;   //设置IFCTL_01，CC1输入不反相，输入源为对应 CC 通道的 CCP 引脚
 
 
    //设置CTRCTL, 重载计数器听通道0的LCOND(不用捕获重装计数器)，计数节奏听通道0的ACOND(每个TIMCLK)， 计时器清0听通道0的ZCOND(不清0)
