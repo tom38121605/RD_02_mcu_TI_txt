@@ -1,11 +1,14 @@
 
 
-0. 问： PINCM[31] =  6<<0 表示什么意思
+0. 问： PINCM[31] =  6<<0 表示什么意思  //PB15
 
 答   在 MSPM0G3507 数据手册， p12页的“表 6-1. 引脚属性”，
-       每一行是一个引脚，其中 DIGITAL [PIN FUNCTION] 这一列，会列出该引脚所有可选的数字外设功能，方括号里的数字就是 PF 的值。
-       PA31对应的是： UART0_RX [2] / I2C0_SCL [3] / TIMA0_C3N [4] /TIMG12_C1 [5] / CLK_OUT [6]/ TIMG7_C1 [7] / TIMA1_C1[8]
-       6  --  对应  CLK_OUT [6]    //定时器通过引脚输出
+
+       每一行是一个引脚，其中 DIGITAL [PIN FUNCTION] 这一列，会列出 PF 的值。
+       PB15对应的是：UART2_TX [2] / SPI1_PICO [3] / UART3_CTS [4] /TIMG8_C0 [5] / TIMG7_C0 [6]
+
+       6  --  对应  TIMG7_C0 [6]
+
 
 
 
@@ -55,7 +58,7 @@
     //设置PINCM[31]， 复用PB15为TIMG7_CCP0，打开引脚对外设的透传，关闭输入使能 
     // DL_GPIO_initPeripheralOutputFunction(GPIO_PWM_0_C0_IOMUX,  GPIO_PWM_0_C0_IOMUX_FUNC);    //31，bit.4-0=6
     //    IOMUX->SECCFG.PINCM[31] =  function | IOMUX_PINCM_PC_CONNECTED ;        //6  | 1<<7 
-          IOMUX->SECCFG.PINCM[31] =  6<<0 | 1<<7 | (0<<18) ;       //CLK_OUT [6]/ 复用TIMG7_CCP0，打开引脚对外设的透传，关闭输入使能   
+          IOMUX->SECCFG.PINCM[31] =  6<<0 | 1<<7 | (0<<18) ;       // TIMG7_C0 [6]  复用TIMG7_CCP0，打开引脚对外设的透传，关闭输入使能   
 
     //设置DOESET31_0，使能PB15为输出
     //DL_GPIO_enableOutput(GPIO_PWM_0_C0_PORT, GPIO_PWM_0_C0_PIN);   //GPIOB ， DL_GPIO_PIN_15
@@ -80,7 +83,7 @@
         DL_Timer_initFourCCPWMMode(  PWM_0_INST,  gPWM_0Config );
 
 
-    //设置CTRCTL, 重载计数器听通道0的LCOND(不用捕获重装计数器)，计数节奏听通道0的ACOND(每个TIMCLK)， 计时器清0听通道0的ZCOND(不清0)
+    //设置CTRCTL, 重载计数器听通道0的LCOND(捕获时计数值不置lod)，计数节奏听通道0的ACOND(每个TIMCLK)， 计时器清0听通道0的ZCOND(捕获时计数值不置0)
     //DL_TimerG_setCounterControl(PWM_0_INST, DL_TIMER_CZC_CCCTL0_ZCOND, DL_TIMER_CAC_CCCTL0_ACOND, DL_TIMER_CLC_CCCTL0_LCOND);   // 000<<13 | 000<<10  | 000<<7
     //   DL_Timer_setCounterControll(PWM_0_INST, 000<<13 | 000<<10  | 000<<7 );  
          gptimer->COUNTERREGS.CTRCTL $=   000<<7 |000<<10 |000<<13;

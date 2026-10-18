@@ -25,7 +25,7 @@ SYSCFG_DL_init( )
     //设置PINCM[31]， 复用PB15为TIMG7_CCP0，打开引脚对外设的透传，关闭输入使能 
     // DL_GPIO_initPeripheralOutputFunction(GPIO_PWM_0_C0_IOMUX,  GPIO_PWM_0_C0_IOMUX_FUNC);    //31，bit.4-0=6
     //    IOMUX->SECCFG.PINCM[31] =  function | IOMUX_PINCM_PC_CONNECTED ;        //6  | 1<<7 
-          IOMUX->SECCFG.PINCM[31] =  6<<0 | 1<<7 | (0<<18) ;       //CLK_OUT [6]/ 复用TIMG7_CCP0，打开引脚对外设的透传，关闭输入使能   
+          IOMUX->SECCFG.PINCM[31] =  6<<0 | 1<<7 | (0<<18) ;       //PB15的 TIMG7_C0 [6]
 
 
     //设置DOESET31_0，使能PB15为输出
