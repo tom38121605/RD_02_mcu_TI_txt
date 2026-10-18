@@ -14,7 +14,7 @@
 
 
     //设置CTRCTL，开启定时器tima0
-    DL_TimerA_startCounter(TIMER_0_INST);
+    //DL_TimerA_startCounter(TIMER_0_INST);
         gptimer->COUNTERREGS.CTRCTL |= 1<<0;
 
 
@@ -61,7 +61,7 @@ SYSCFG_DL_TIMER_0_init()
      //设置LOAD，设置tima0的load值为 159
     //设置CTRCTL，开启时从load计数
     //设置CC_01，tima0的cc0的初始门槛值为0
-    // 设置CCCTL_01，为compare， 捕获时不清0计时器，不用捕获边沿去重装计数器，计数节奏每个 TIMCLK 走一步, 关闭捕获
+    // 设置CCCTL_01，为compare， 捕获时计数值不置0，捕获时计数值不置load，计数节奏每个 TIMCLK 走一步, 关闭捕获
     // 设置CTRCTL，向下计数，向下数到 0 后自动重载， 停止定时器
     DL_TimerA_initTimerMode(TIMER_0_INST,   gTIMER_0TimerConfig);
 
@@ -71,8 +71,8 @@ SYSCFG_DL_TIMER_0_init()
         gptimer->CPU_INT.IMASK |= interruptMask;    //1<<0   
 
     //使能tima0的时钟
-    DL_TimerA_enableClock(TIMER_0_INST);
-   //    gptimer->COMMONREGS.CCLKCTL = (GPTIMER_CCLKCTL_CLKEN_ENABLED);     // CCLKCTL.0=1            //使能tima0的时钟
+    //DL_TimerA_enableClock(TIMER_0_INST);
+       gptimer->COMMONREGS.CCLKCTL = GPTIMER_CCLKCTL_CLKEN_ENABLED;     // 1<<0             //使能tima0的时钟
 
 
 
@@ -83,7 +83,7 @@ SYSCFG_DL_TIMER_0_init()
  //设置LOAD，设置tima0的load值为 159
  //设置CTRCTL，开启时从load计数
  //设置CC_01，tima0的cc0的初始门槛值为0
-// 设置CCCTL_01，为compare， 捕获时不清0计时器，不用捕获边沿去重装计数器，计数节奏每个 TIMCLK 走一步, 关闭捕获
+// 设置CCCTL_01，为compare， 捕获时计数值不置0，捕获时计数值不置load，计数节奏每个 TIMCLK 走一步, 关闭捕获
 // 设置CTRCTL，向下计数，向下数到 0 后自动重载， 停止定时器
 
 DL_Timer_initTimerMode( gptimer, config )
@@ -106,14 +106,14 @@ DL_Timer_initTimerMode( gptimer, config )
     //DL_Timer_setCaptureCompareValue(  gptimer, config->counterVal, DL_TIMER_CC_0_INDEX);
         gptimer->COUNTERREGS.CC_01[0]=0;
 
-    // 设置CCCTL_01，为compare， 捕获时不清0计时器，不用捕获边沿去重装计数器，计数节奏每个 TIMCLK 走一步, 关闭捕获
+    // 设置CCCTL_01，为compare， 捕获时计数值不置0，捕获时计数值不置load，计数节奏每个 TIMCLK 走一步, 关闭捕获
     //DL_Timer_setCaptureCompareCtl(gptimer,  config->genIntermInt,   DL_TIMER_CC_ACOND_TIMCLK,  DL_TIMER_CC_0_INDEX);
-        gptimer->COUNTERREGS.CCCTL_01[0] $=  0<<17 |  | 000<<12 |   | 000<<8 |  000<<4 |  000<<0;             // 设置为compare， 捕获时不清0计时器，不用捕获边沿去重装计数器，计数节奏每个 TIMCLK 走一步, 关闭捕获
+        gptimer->COUNTERREGS.CCCTL_01[0] $=  0<<17 | 000<<12 | 000<<8 | 000<<4  |  000<<0;             
 
 
-    // 设置CTRCTL，开启时从load计数，向下计数，向下数到 0 后自动重载， 停止定时器
+    // 设置CTRCTL，开启时从load计数，向下计数，向下数到 0 后时钟继续走， 停止定时器
    //gptimer->COUNTERREGS.CTRCTL =  config->timerMode | config->startTimer;
-       gptimer->COUNTERREGS.CTRCTL $=   (00<<28) | 00 << 4 |  001<<1 | 0<<0;    // 开启时从load计数，向下计数，向下数到 0 后自动重载， 停止定时器
+       gptimer->COUNTERREGS.CTRCTL $=   (00<<28) | 00 << 4 |  001<<1 | 0<<0;    
 
 
 
