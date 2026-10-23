@@ -15,15 +15,15 @@
 
    //---------------------PA0  event-------------------------------------------------------------------------------   
 
-    //设置 SUB0CFG, 触发toggle， 引脚位PA0
+    //设置 SUB0CFG： 把任务 PA14 翻转 (开灯)  -->  装進PA0的广播站0(箩筐)
     //DL_GPIO_configSubscriber(LED_PORT, DL_GPIO_SUBSCRIBER_INDEX_0, DL_GPIO_SUBSCRIBER_OUT_POLICY_TOGGLE, DL_GPIO_SUBSCRIBER0_PIN_0);  //0, 10<<8, 0000<16
        GPIOA->SUB0CFG  $= 10<<8 | 0000<<16;
 
-    //把通道1连接到GPIOA： 通道1 （闹铃） --   PA0 toggle （开灯1）
+    //把通道1连接到PA0的广播站0：  广播站0  -->  通道1(闹铃)
     //DL_GPIO_setSubscriberChanID(LED_PORT, DL_GPIO_SUBSCRIBER_INDEX_0, GPIOA_EVENT_SUBSCRIBER_0_CHANNEL);   //  0 ,1   
-      GPIOA->FSUB_0 = 1;         //把通道1连接到GPIOA
+      GPIOA->FSUB_0 = 1;         //把通道1连接到GPIOA0的广播站0
 
-       //使能通道1的接收开关
+    //使能PA0的广播站0的接收开关
     //DL_GPIO_enableSubscriber(LED_PORT, DL_GPIO_SUBSCRIBER_INDEX_0);  //0
       GPIOA->SUB0CFG |= 1<<0;
 
@@ -94,16 +94,24 @@
        TIMA0->COMMONREGS.CCLKCTL =  1<<0;            //使能tima0的时钟
 
    
-    // 触发事件tima0 zero（6点）  -- 广播站1   （把苹果装入箩筐）   
+    // 设置IMASK：把zero事件(6点) -->  装进tima0的广播站0(箩筐) 
     //DL_TimerA_enableEvent(TIMER_0_INST, DL_TIMERA_EVENT_ROUTE_1, (DL_TIMERA_EVENT_ZERO_EVENT));
-      TIMA0->GEN_EVENT0.IMASK  |= 1<<0;         //把苹果装入箩：tima0 zero（6点）  -- 广播站1
+      TIMA0->GEN_EVENT0.IMASK  |= 1<<0;        //把苹果装入箩：tima0 zero(6点)  --> 广播站0
       
       
-    //把事件zero连接到通道1： 触发事件tima0 zero（6点）  -- 广播站1  --   通道1 （闹铃）
+    //把事件zero连接到通道1： 触发事件tima0 zero(6点)  --> 广播站0  --> 通道1 (闹铃)
     //DL_TimerA_setPublisherChanID(TIMER_0_INST, DL_TIMERA_PUBLISHER_INDEX_0, TIMER_0_INST_PUB_0_CH);
-      TIMA0->FPUB_0 =1;        //把事件zero连接到通道1
+      TIMA0->FPUB_0 =1;        // 广播站0  --> 通道1 (闹铃)
       
     
+
+   //CCU1 -- PUB0
+   TIMA0->GEN_EVENT0.IMASK  |= 1<<9;   
+   
+   //PUB0 --> channel 1  
+   TIMA0->FPUB_0 =1;    
+
+
     
    //---------------------tima0  event----------------end---------------------------------------------------------------
 
