@@ -89,40 +89,48 @@
 -------
 
 
-CAPTURE_0_INST_IRQHandler()
-
-    iret = DL_TimerG_getPendingInterrupt(CAPTURE_0_INST);
-
-    switch (iret )
-    
-        case DL_TIMERG_IIDX_CC0_DN:
-        
-            if (isynch == 1)   //第3个是pwm的下降沿，            
+CAPTURE_0_INST_IRQHandler( )  
+ 
+   uint32_t iret=0;
    
-                //取得cc0的拍照值
+   iret = DL_TimerG_getPendingInterrupt(CAPTURE_0_INST);
+   
+    switch (iret) 
+     
+        case DL_TIMERG_IIDX_CC0_UP:      //up    //9
+        
+            if (isynch == 1)      //第3个是pwm的上升沿，    
+            
                 //ival_cc0 = DL_TimerG_getCaptureCompareValue(CAPTURE_0_INST, DL_TIMER_CC_0_INDEX);
-                  ival_cc0 = TIMA0->COUNTERREGS.CC_01[0];   
-
-                flg_capture_up = 1;            
+                ival_cc0 = TIMA0->COUNTERREGS.CC_01[0];                
+                
+                flg_capture_up = 1;
+             
             
-            else     //第1个是pwm的下降沿做同步信号     （第2个是pwm的上升沿，不会触发中断，但会拍照计数值到CC0 -- 待验证）                 
-                isynch = 1;            
+            else       //第1个是pwm的上升沿做同步信号     （第2个是pwm的下降沿，不会触发中断，但会拍照计数值到CC0 -- 待验证）                   
+                isynch = 1;
             
-
-            //DL_TimerG_setTimerCount(CAPTURE_0_INST, 0);   // 收到同步信号后（或者完成一个pwm周期后），重置计数值 
-              TIMA0->COUNTERREGS.CTR = 0;        //up   
-
+            
+            //DL_TimerG_setTimerCount(CAPTURE_0_INST, 0);      // 收到同步信号后（或者完成一个pwm周期后），重置计数值      
+                TIMA0->COUNTERREGS.CTR = 0;        //up         
+            
             break;
             
-            
-        case DL_TIMERG_IIDX_ZERO:
+        case DL_TIMERA_IIDX_LOAD:      //2
 
-            isynch = 0;    //没有检测到pwm信号
+            isynch = 0;        //没有检测到pwm信号
             break;
 
-    
-
-
+        
+        //case DL_TIMERG_IIDX_ZERO:      //1   //nouse here
+        //    break;
+            
+        default:
+ 
+             sprintf(txBuf, "IRQ: %d\r\n", iret);
+             SendString(txBuf);
+             break;
+ 
 
 
 
