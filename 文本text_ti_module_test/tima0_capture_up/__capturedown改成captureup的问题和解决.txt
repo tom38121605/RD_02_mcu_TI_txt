@@ -1,4 +1,10 @@
 ﻿
+
+注意点：  改成向上计数时， 最好把CTRCTL的CVAE设置为02   （虽然默认的00也能正常工作 -- 这是软件设置不起作用，CTR听底层硬件逻辑的）
+         CAPTURE_0_INST->COUNTERREGS.CTRCTL &= ~(3 << 28);   
+         CAPTURE_0_INST->COUNTERREGS.CTRCTL |=  2 << 28 ;  
+
+
 1. 在sysconfig中， 修改下面2个地方
     1).  在 capture mode中，把“Edge Time Down Counting" 修改成 ”Edge Time Up Counting"
     2).  Interrupts configuration中，
