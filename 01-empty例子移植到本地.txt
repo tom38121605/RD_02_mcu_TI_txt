@@ -10,7 +10,7 @@ empty例子移植到本地：   （绝对路径）
        cmd.exe /C "D:\ti\mspm0_sdk_2_05_01_00\tools\keil\syscfg.bat '$P' empty.syscfg"
 
     。魔法棒  -- linker  --  misc controls --  把路径 修改为.a文件的绝对路径
-       D:\ti\mspm0_sdk_2_05_01_00\source\ti\driverlib\lib\keil\m0p\mspm0g1x0x_g3x0x\driverlib.a
+       D:\ti\mspm0_sdk_2_05_01_00\source\ti\driverlib\lib\keil\m0p\mspm0g1x0x_g3x0x\driverlib.a   //这一步可省略，可在下面第8步直接加入.a文件到工程里面
 
     。魔法棒  --  c/c++  --  在includ处  ，把相对路径修改成绝对路径如下：
        D:\ti\mspm0_sdk_2_05_01_00\source\third_party\CMSIS\Core\Include
@@ -32,6 +32,13 @@ empty例子移植到本地：   （绝对路径）
       在lib中添加文件 sdk目录\source\ti\driverlib\lib\keil\m0p\mspm0g1x0x_g3x0xdriverlib.a文件
    。 点中左边栏的driverlib.a文件 --   右键 option...   --  在file type处选择“library file"  -- ok
 
+
+9. 添加实际的lib file代替 .a文件
+   。添加组lib ， 或进入原来的组lib  
+   。删除原来的mspm0g1x0x_g3x0xdriverlib.a文件
+
+   。把D:\ti\mspm0_sdk_2_11_00_07\source\ti\driverlib里面文件和m0p目录拷贝到本地的driverlib目录 ( D:\ti_module_test\master_poll_test\driverlib )
+   。在组lib中添加本地的driverlib及子目录里的所有文件 
 
 
 
